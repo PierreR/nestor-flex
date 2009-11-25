@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="srv.listAll()">
+    <mx:Script><![CDATA[
+        ]]>
+    </mx:Script>
+    <mx:RemoteObject id="srv"
+                     destination="employeeSrv">
+                     </mx:RemoteObject>
+    <mx:Panel title="Catalog" width="100%" height="100%">
+		<mx:DataGrid id="list" dataProvider="{srv.listAll.lastResult}" width="100%" height="100%"/>
+	</mx:Panel>
+</mx:Application>

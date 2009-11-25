@@ -1,0 +1,19 @@
+<target name="schemaexport" description="Export schema to DDL file"
+    depends="compile-jpa"> <!-- compile model classes before running hibernatetool -->
+
+  <!-- task definition; project.class.path contains all necessary libs -->
+  <taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask"
+      classpathref="project.class.path" />
+
+  <hibernatetool destdir="export/db"> <!-- check that directory exists -->
+    <jpaconfiguration persistenceunit="myPersistenceUnitName" />
+    <classpath>
+      <!--
+          compiled model classes and other configuration files don't forget
+          to put the parent directory of META-INF/persistence.xml here
+      -->
+    </classpath>
+    <hbm2ddl outputfilename="schemaexport.sql" format="true"
+        export="false" drop="true" />
+  </hibernatetool>
+</target>
