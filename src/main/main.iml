@@ -22,7 +22,7 @@
         <webroots>
           <root url="file://$MODULE_DIR$/webapp" relative="/" />
         </webroots>
-        <context-artifact name="mexit" />
+        <context-artifact name="nestor" />
       </configuration>
     </facet>
   </component>

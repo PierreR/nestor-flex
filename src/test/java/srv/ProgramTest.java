@@ -1,13 +1,13 @@
 package srv;
 
-import entity.Municipality;
-import entity.Program;
 import enu.ContractType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
+import entity.Program; 
+import entity.Municipality;
 import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
@@ -16,11 +16,11 @@ import static junit.framework.Assert.assertEquals;
 /**
  * Date: Nov 18, 2009
  */
-public class ProgramSRVTest extends DBBootStrapper {
+public class ProgramTest extends DBBootStrapper {
 
     private static int TEST_DATA_COUNT = 2;
 
-    private ProgramSRV srv;
+    private srv.Program srv;
 
     @BeforeClass
     public void fixture() {
@@ -42,7 +42,7 @@ public class ProgramSRVTest extends DBBootStrapper {
 
     @BeforeTest
     public void preTest() {
-        srv = injector.getInstance(ProgramSRV.class);
+        srv = injector.getInstance(srv.Program.class);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class ProgramSRVTest extends DBBootStrapper {
 
     @Test
     public void findAll() {
-        Set<Program> programs = srv.findAll();
+        Set<entity.Program> programs = srv.findAll();
         assertEquals(TEST_DATA_COUNT, programs.size());
 
     }

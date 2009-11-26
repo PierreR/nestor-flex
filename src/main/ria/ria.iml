@@ -8,7 +8,7 @@
     <option name="VERSION" value="3" />
     <option name="SERVER_TECHNOLOGY" value="BlazeDS" />
     <option name="PATH_TO_SERVICES_CONFIG_XML" value="src/main/webapp/WEB-INF/flex/services-config.xml" />
-    <option name="CONTEXT_ROOT" value="mexit" />
+    <option name="CONTEXT_ROOT" value="nestor" />
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />

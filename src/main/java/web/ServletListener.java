@@ -7,7 +7,6 @@ import com.google.inject.servlet.ServletModule;
 import com.wideplay.warp.persist.PersistenceService;
 import com.wideplay.warp.persist.UnitOfWork;
 import com.wideplay.warp.persist.jpa.JpaUnit;
-import dao.ProgramQ;
 import flex.messaging.MessageBrokerServlet;
 
 import javax.servlet.ServletContextEvent;
@@ -25,7 +24,7 @@ public class ServletListener extends GuiceServletContextListener {
         Injector injector = Guice.createInjector(PersistenceService.usingJpa()
                 .across(UnitOfWork.REQUEST)
                 .forAll(Matchers.inSubpackage("srv"))
-                .addAccessor(ProgramQ.class)  // try to group common interfaces here !!
+                .addAccessor(dao.Program.class)  // try to group common interfaces here !!
                 .buildModule(),
                 new ServletModule() {
                     @Override
@@ -38,7 +37,7 @@ public class ServletListener extends GuiceServletContextListener {
                 new AbstractModule() {
                     @Override
                     protected void configure() {
-                        bindConstant().annotatedWith(JpaUnit.class).to("mexitdb");
+                        bindConstant().annotatedWith(JpaUnit.class).to("nestordb");
                     }
                 });
 

@@ -1,12 +1,43 @@
 <?xml version="1.0" ?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="srv.listAll()">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml">
+
     <mx:Script><![CDATA[
+
+        import mx.rpc.events.ResultEvent;
+
+        [Bindable]
+        public var program:Program = new Program();
+
+        private function save():void {
+
+            program.name = programName.text;
+            srv.save(program);
+        }
+
+        private function createResult(event:ResultEvent):void
+        {
+            program = event.result as Program;
+            // label = program.name;
+        }
+
         ]]>
     </mx:Script>
-    <mx:RemoteObject id="srv"
-                     destination="employeeSrv">
-                     </mx:RemoteObject>
-    <mx:Panel title="Catalog" width="100%" height="100%">
-		<mx:DataGrid id="list" dataProvider="{srv.listAll.lastResult}" width="100%" height="100%"/>
-	</mx:Panel>
+
+    <mx:RemoteObject id="srv" destination="program">
+        <mx:method name="save" result="createResult(event)"/>
+    </mx:RemoteObject>
+
+    <mx:Panel title="Program" width="100%" height="100%">
+        <mx:Form>
+            <mx:FormHeading label="Program crud"/>
+
+            <mx:FormItem label="Name:">
+                <mx:TextInput id="programName" text="{program.name}"/>
+            </mx:FormItem>
+
+        </mx:Form>
+    </mx:Panel>
+
+    <mx:Button label="Save" click="save()" bottom="10" left="10" height="36" width="63"/>
+
 </mx:Application>

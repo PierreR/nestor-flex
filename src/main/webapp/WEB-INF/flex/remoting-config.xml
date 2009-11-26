@@ -11,10 +11,10 @@
     </default-channels>
 
 
-    <destination id="employeeSrv">
+    <destination id="program">
         <properties>
             <factory>GuiceFactory</factory>
-            <source>srv.ProgramSRV</source>
+            <source>srv.Program</source>
         </properties>
     </destination>
 

@@ -9,3 +9,5 @@ lib
 blazeds
 samples
 out
+test-output
+testdb.properties

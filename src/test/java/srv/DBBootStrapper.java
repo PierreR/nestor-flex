@@ -8,7 +8,6 @@ import com.wideplay.warp.persist.PersistenceService;
 import com.wideplay.warp.persist.UnitOfWork;
 import com.wideplay.warp.persist.jpa.JpaUnit;
 import dao.CompanyQ;
-import dao.ProgramQ;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -37,7 +36,7 @@ public class DBBootStrapper implements ITestListener {
         injector = Guice.createInjector(PersistenceService.usingJpa()
                 .across(UnitOfWork.TRANSACTION)
                 .forAll(Matchers.any())
-                .addAccessor(ProgramQ.class)
+                .addAccessor(dao.Program.class)
                 .addAccessor(CompanyQ.class)
                 .buildModule(),
                 new AbstractModule() {

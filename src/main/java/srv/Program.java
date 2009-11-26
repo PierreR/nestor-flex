@@ -2,8 +2,6 @@ package srv;
 
 
 import com.google.inject.Inject;
-import dao.ProgramQ;
-import entity.Program;
 
 import javax.persistence.EntityManager;
 import java.util.Set;
@@ -12,24 +10,24 @@ import java.util.Set;
  * The service layer : should roughly match user stories
  * Date: Nov 18, 2009
  */
-public class ProgramSRV {
+public class Program {
 
     @Inject
-    ProgramQ dao;
+    dao.Program dao;
 
     @Inject
     EntityManager em;
 
 
 
-    public int create(Program program) {
+    public int save(entity.Program program) {
         //validate
         // create
         em.persist(program);
         return program.getId();
     }
 
-    public Set<Program> findAll() {
+    public Set<entity.Program> findAll() {
         return dao.findAll();
     }
 }
