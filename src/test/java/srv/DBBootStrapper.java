@@ -13,6 +13,7 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import javax.persistence.EntityManager;
+import java.sql.Date;
 
 /**
  * The database is only started once at loading time.
@@ -31,11 +32,12 @@ public class DBBootStrapper implements ITestListener {
 
     static Injector injector;
     static final String EXPECTED_NAME = "expected";
+    static final Date EXPECTED_DAY_DATE = new Date(System.currentTimeMillis());
 
     static {
         injector = Guice.createInjector(PersistenceService.usingJpa()
                 .across(UnitOfWork.TRANSACTION)
-                .forAll(Matchers.any())
+             //   .forAll(Matchers.any())
                 .addAccessor(dao.Program.class)
                 .addAccessor(CompanyQ.class)
                 .buildModule(),

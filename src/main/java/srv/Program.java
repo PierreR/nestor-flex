@@ -2,8 +2,11 @@ package srv;
 
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.wideplay.warp.persist.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -16,18 +19,33 @@ public class Program {
     dao.Program dao;
 
     @Inject
-    EntityManager em;
+    Provider<EntityManager> emp;
 
 
-
-    public int save(entity.Program program) {
+    @Transactional
+    public entity.Program save(entity.Program program) {
         //validate
         // create
+
+        EntityManager em = emp.get();
+
+        if (program.getId() != null) {
+            program.setModifiedDate(new Date());
+            program = em.merge(program);
+        } else {
+            program.setCreationDate(new Date());
+        }
+
         em.persist(program);
-        return program.getId();
+
+        return program;
     }
 
     public Set<entity.Program> findAll() {
         return dao.findAll();
+    }
+
+    public entity.Program findByName(String name) {
+        return dao.findByName(name);
     }
 }

@@ -1,23 +1,46 @@
 <?xml version="1.0" ?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="initApp(event)">
 
     <mx:Script><![CDATA[
-
+        import mx.events.FlexEvent;
         import mx.rpc.events.ResultEvent;
+
+        private function initApp(event:FlexEvent):void {
+            trace(resourceManager.getLocales())
+        }
+
 
         [Bindable]
         public var program:Program = new Program();
 
-        private function save():void {
+        private function search():void {
+            srv.findByName(searchText.text);
+        }
 
+        private function save():void {
+            // Hopefully this will be gone in Flex 4 ...
             program.name = programName.text;
+            program.managerName = managerName.text;
+            program.bureauName = bureauName.text;
+            program.bureauDesignationDate = bureauDesignationDate.selectedDate;
+            program.councilDate = councilDate.selectedDate;
+            program.managerDesignationDate = managerDesignationDate.selectedDate;
             srv.save(program);
         }
 
         private function createResult(event:ResultEvent):void
         {
             program = event.result as Program;
-            // label = program.name;
+            var _creationDate:String = program.modifiedDate != null ? program.modifiedDate.toLocaleDateString() : null;
+            var _modifiedDate:String = program.modifiedDate != null ? program.modifiedDate.toLocaleDateString() : null;
+            if (_creationDate != null) {
+                creationDate.text = " créé le " + _creationDate;
+            }
+            ;
+            if (_modifiedDate != null) {
+                modificationDate.text = " sauvegarder le " + _modifiedDate;
+            }
+            ;
         }
 
         ]]>
@@ -25,16 +48,38 @@
 
     <mx:RemoteObject id="srv" destination="program">
         <mx:method name="save" result="createResult(event)"/>
+        <mx:method name="findByName" result="createResult(event)"/>
     </mx:RemoteObject>
 
+    <mx:Box>
+        <mx:TextInput id="searchText" width="100"/>
+        <mx:Button label="@Resource(bundle='resources', key='search')" click="search()"/>
+    </mx:Box>
     <mx:Panel title="Program" width="100%" height="100%">
+
+        <mx:Label id="creationDate" text="{program.creationDate}"/>
+        <mx:Label id="modificationDate" text="{program.modifiedDate}"/>
         <mx:Form>
             <mx:FormHeading label="Program crud"/>
 
-            <mx:FormItem label="Name:">
+            <mx:FormItem label="Nom:">
                 <mx:TextInput id="programName" text="{program.name}"/>
             </mx:FormItem>
-
+            <mx:FormItem label="Nom du chef de projet:">
+                <mx:TextInput id="managerName" text="{program.managerName}"/>
+            </mx:FormItem>
+            <mx:FormItem label="Nom du bureau d'étude:">
+                <mx:TextInput id="bureauName" text="{program.bureauName}"/>
+            </mx:FormItem>
+            <mx:FormItem label="Désignation du bureau d'étude:">
+                <mx:DateField id="bureauDesignationDate" selectedDate="{program.bureauDesignationDate}"/>
+            </mx:FormItem>
+            <mx:FormItem label="Conseil communal:">
+                <mx:DateField id="councilDate" selectedDate="{program.councilDate}"/>
+            </mx:FormItem>
+            <mx:FormItem label="Désignation du chef de projet:">
+                <mx:DateField id="managerDesignationDate"  selectedDate="{program.managerDesignationDate}"/>
+            </mx:FormItem>
         </mx:Form>
     </mx:Panel>
 

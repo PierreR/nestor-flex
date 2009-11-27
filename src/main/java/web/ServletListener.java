@@ -23,7 +23,7 @@ public class ServletListener extends GuiceServletContextListener {
     protected Injector getInjector() {
         Injector injector = Guice.createInjector(PersistenceService.usingJpa()
                 .across(UnitOfWork.REQUEST)
-                .forAll(Matchers.inSubpackage("srv"))
+                .forAll(Matchers.any())
                 .addAccessor(dao.Program.class)  // try to group common interfaces here !!
                 .buildModule(),
                 new ServletModule() {

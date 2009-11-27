@@ -13,17 +13,18 @@ import java.util.Set;
 @Entity
 public class Program {
     @Id @GeneratedValue
-    int id;
-    String name,
+    Integer id;
+    String  name,
             managerName,                // name of the project manager
             bureauName;                 // "bureau d'étude"
-    Date grantDate,
+    Date    creationDate, modifiedDate,
+            grantDate,
             notificationDate,              // notification to the commune
             managerDesignationDate,        // designation of the project manager
             councilDate,                   //  commune council
             bureauDesignationDate;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     Municipality municipality;
 
     @Enumerated
@@ -32,11 +33,11 @@ public class Program {
     @OneToMany(mappedBy = "programId", cascade = CascadeType.ALL)
     Set<Planning> planning = new HashSet<Planning>();
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -133,6 +134,22 @@ public class Program {
 
     public void setPlanning(Set<Planning> planning) {
         this.planning = planning;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Entity()
