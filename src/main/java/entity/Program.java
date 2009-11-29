@@ -11,18 +11,14 @@ import java.util.Set;
  * Date: Nov 24, 2009
  */
 @Entity
-public class Program {
-    @Id @GeneratedValue
-    Integer id;
-    String  name,
-            managerName,                // name of the project manager
-            bureauName;                 // "bureau d'étude"
-    Date    creationDate, modifiedDate,
-            grantDate,
-            notificationDate,              // notification to the commune
-            managerDesignationDate,        // designation of the project manager
-            councilDate,                   //  commune council
-            bureauDesignationDate;
+public class Program extends BaseEntity {
+    String managerName;                // name of the project manager
+            String bureauName;                 // "bureau d'étude"
+    Date grantDate;
+    Date notificationDate;              // notification to the commune
+            Date managerDesignationDate;        // designation of the project manager
+            Date councilDate;                   //  commune council
+            Date bureauDesignationDate;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     Municipality municipality;
@@ -32,22 +28,6 @@ public class Program {
 
     @OneToMany(mappedBy = "programId", cascade = CascadeType.ALL)
     Set<Planning> planning = new HashSet<Planning>();
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getReference() {
         return getContractType().name() + getContractType().name() +
@@ -134,22 +114,6 @@ public class Program {
 
     public void setPlanning(Set<Planning> planning) {
         this.planning = planning;
-    }
-
-    public Date getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
     }
 
     @Entity()

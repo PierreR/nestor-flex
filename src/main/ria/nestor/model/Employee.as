@@ -1,4 +1,4 @@
-package {
+package nestor.model{
 public class Employee {
     public function Employee() {
     }

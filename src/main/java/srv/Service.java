@@ -1,32 +1,23 @@
 package srv;
 
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.wideplay.warp.persist.Transactional;
+import entity.BaseEntity;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
-import java.util.Set;
 
 /**
- * The service layer : should roughly match user stories
- * Date: Nov 18, 2009
+ * Date: Nov 29, 2009
  */
-public class Program {
-
-    @Inject
-    dao.Program dao;
+public abstract class Service<E extends BaseEntity> {
 
     @Inject
     Provider<EntityManager> emp;
-
-
+    
     @Transactional
-    public entity.Program save(entity.Program program) {
-        //validate
-        // create
-
+    public E save(E program) {
         EntityManager em = emp.get();
 
         if (program.getId() != null) {
@@ -34,18 +25,11 @@ public class Program {
             program = em.merge(program);
         } else {
             program.setCreationDate(new Date());
+            em.persist(program);
         }
-
-        em.persist(program);
-
+    
         return program;
-    }
 
-    public Set<entity.Program> findAll() {
-        return dao.findAll();
-    }
 
-    public entity.Program findByName(String name) {
-        return dao.findByName(name);
     }
 }

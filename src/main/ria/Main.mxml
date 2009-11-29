@@ -2,16 +2,29 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="initApp(event)">
 
     <mx:Script><![CDATA[
+        import mx.collections.ArrayCollection;
         import mx.events.FlexEvent;
         import mx.rpc.events.ResultEvent;
+        import mx.managers.PopUpManager;
 
-        private function initApp(event:FlexEvent):void {
-            trace(resourceManager.getLocales())
-        }
-
+        import nestor.component.MunicipalityPicker;
+        import nestor.model.Program;
 
         [Bindable]
         public var program:Program = new Program();
+
+        [Bindable]
+        public var municipalities:ArrayCollection;
+
+        private function initApp(event:FlexEvent):void {
+            trace(resourceManager.getLocales())
+            municipalityService.listAllMunicipalities();
+        }
+
+        private function initResult(event:ResultEvent):void
+        {
+            municipalities = event.result as ArrayCollection
+        }
 
         private function search():void {
             srv.findByName(searchText.text);
@@ -34,14 +47,20 @@
             var _creationDate:String = program.modifiedDate != null ? program.modifiedDate.toLocaleDateString() : null;
             var _modifiedDate:String = program.modifiedDate != null ? program.modifiedDate.toLocaleDateString() : null;
             if (_creationDate != null) {
-                creationDate.text = " créé le " + _creationDate;
+                creationDate.text = " Créé le " + _creationDate;
             }
             ;
             if (_modifiedDate != null) {
-                modificationDate.text = " sauvegarder le " + _modifiedDate;
+                modificationDate.text = " Sauvegarder le " + _modifiedDate;
             }
             ;
         }
+
+        private function showMunicipalityPicker(evt:MouseEvent):void {
+            PopUpManager.createPopUp(this, MunicipalityPicker, true);
+            trace("after");
+        }
+
 
         ]]>
     </mx:Script>
@@ -49,6 +68,11 @@
     <mx:RemoteObject id="srv" destination="program">
         <mx:method name="save" result="createResult(event)"/>
         <mx:method name="findByName" result="createResult(event)"/>
+        <mx:method name="listAllMunicipalities" result="initResult(event)"/>
+    </mx:RemoteObject>
+
+    <mx:RemoteObject id="municipalityService" destination="municipality">
+        <mx:method name="listAllMunicipalities" result="initResult(event)"/>
     </mx:RemoteObject>
 
     <mx:Box>
@@ -65,6 +89,13 @@
             <mx:FormItem label="Nom:">
                 <mx:TextInput id="programName" text="{program.name}"/>
             </mx:FormItem>
+            <mx:Box direction="horizontal" borderStyle="solid"
+                    paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10">
+                <mx:FormItem label="Municipality:">
+                    <mx:ComboBox id="municipality" dataProvider="{municipalities}"/>
+                </mx:FormItem>
+                <mx:Button click="showMunicipalityPicker(event)"></mx:Button>
+            </mx:Box>
             <mx:FormItem label="Nom du chef de projet:">
                 <mx:TextInput id="managerName" text="{program.managerName}"/>
             </mx:FormItem>
@@ -78,7 +109,7 @@
                 <mx:DateField id="councilDate" selectedDate="{program.councilDate}"/>
             </mx:FormItem>
             <mx:FormItem label="Désignation du chef de projet:">
-                <mx:DateField id="managerDesignationDate"  selectedDate="{program.managerDesignationDate}"/>
+                <mx:DateField id="managerDesignationDate" selectedDate="{program.managerDesignationDate}"/>
             </mx:FormItem>
         </mx:Form>
     </mx:Panel>

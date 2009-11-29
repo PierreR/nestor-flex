@@ -8,6 +8,8 @@ import com.wideplay.warp.persist.PersistenceService;
 import com.wideplay.warp.persist.UnitOfWork;
 import com.wideplay.warp.persist.jpa.JpaUnit;
 import dao.CompanyQ;
+import entity.Municipality;
+import entity.Program;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -38,7 +40,7 @@ public class DBBootStrapper implements ITestListener {
         injector = Guice.createInjector(PersistenceService.usingJpa()
                 .across(UnitOfWork.TRANSACTION)
              //   .forAll(Matchers.any())
-                .addAccessor(dao.Program.class)
+                .addAccessor(dao.Program.class).addAccessor(dao.Utils.class)
                 .addAccessor(CompanyQ.class)
                 .buildModule(),
                 new AbstractModule() {
@@ -47,6 +49,7 @@ public class DBBootStrapper implements ITestListener {
                     }
                 });
     }
+
 
     public void onTestStart(ITestResult result) { }
 
@@ -60,7 +63,32 @@ public class DBBootStrapper implements ITestListener {
 
     public void onStart(ITestContext context) {
         injector.getInstance(PersistenceService.class).start();
+        createCommonFixtures();
     }
+
+    /**
+     * Please follow conventions here:
+     *  only one instance created max per entity
+     *  name convention is entityName.fieldName
+     */
+    private void createCommonFixtures() {
+
+        EntityManager em = injector.getInstance(EntityManager.class);
+        em.getTransaction().begin();
+
+        Program program = new Program();
+        program.setName("program.name");
+
+        em.persist(program);
+
+        Municipality municipality = new Municipality();
+        municipality.setName("municipality.name");
+        municipality.setPostalCode("municipality.postalCode");
+
+        em.persist(municipality);
+        em.getTransaction().commit();
+    }
+
 
     public void onFinish(ITestContext context) {
         injector.getInstance(EntityManager.class).close();

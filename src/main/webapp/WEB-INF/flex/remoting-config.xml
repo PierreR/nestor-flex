@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<service id="remoting-service" 
-    class="flex.messaging.services.RemotingService">
+<service id="remoting-service"
+         class="flex.messaging.services.RemotingService">
 
     <adapters>
-        <adapter-definition id="java-object" class="flex.messaging.services.remoting.adapters.JavaAdapter" default="true"/>
+        <adapter-definition id="java-object" class="flex.messaging.services.remoting.adapters.JavaAdapter"
+                            default="true"/>
     </adapters>
 
     <default-channels>
@@ -14,7 +15,14 @@
     <destination id="program">
         <properties>
             <factory>GuiceFactory</factory>
-            <source>srv.Program</source>
+            <source>srv.ProgramService</source>
+        </properties>
+    </destination>
+
+    <destination id="municipality">
+        <properties>
+            <factory>GuiceFactory</factory>
+            <source>srv.MunicipalityService</source>
         </properties>
     </destination>
 

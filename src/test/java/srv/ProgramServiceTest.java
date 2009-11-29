@@ -8,21 +8,18 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
-import java.util.Set;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.*;
 
 
 /**
  * Date: Nov 18, 2009
  */
-public class ProgramTest extends DBBootStrapper {
+public class ProgramServiceTest extends DBBootStrapper {
 
-    private static int TEST_DATA_COUNT = 2;
-
-    private srv.Program srv;
+    private ProgramService srv;
     private dao.Program dao;
+    private static final String PROGRAM_NAME_BRUXELLES = "program.name.bruxelles";
 
     @BeforeClass
     public void fixture() {
@@ -37,25 +34,24 @@ public class ProgramTest extends DBBootStrapper {
         planning.setDate(EXPECTED_DAY_DATE);
 
         Program program = new Program();
+        program.setName(PROGRAM_NAME_BRUXELLES);
         program.setMunicipality(bruxelles);
         em.persist(program);
 
-        program = new Program();
-        em.persist(program);
         em.getTransaction().commit();
 
     }
 
     @BeforeTest
     public void preTest() {
-        srv = injector.getInstance(srv.Program.class);
+        srv = injector.getInstance(ProgramService.class);
         dao = injector.getInstance(dao.Program.class);
     }
 
 
     @Test
     public void create() {
-
+        int progNb = srv.listAll().size();
         Program program = new Program();
         program.setName(EXPECTED_NAME);
 
@@ -65,8 +61,8 @@ public class ProgramTest extends DBBootStrapper {
         assertFalse("The entity should be detached after the transaction completes", em.contains(created));
 
         int id = program.getId();
-        TEST_DATA_COUNT = TEST_DATA_COUNT + 1;
-        assertEquals(TEST_DATA_COUNT, id);
+        assertTrue(id > 0);
+        assertEquals(progNb + 1, srv.listAll().size());
 
         program = em.find(Program.class, id);
         assertEquals(EXPECTED_NAME, program.getName());
@@ -77,11 +73,8 @@ public class ProgramTest extends DBBootStrapper {
 
     @Test
     public void find() {
-        Set<entity.Program> programs = dao.findAll();
-        assertEquals(TEST_DATA_COUNT, programs.size());
-
         Program program = dao.findByMunipality("Bruxelles");
-        assertEquals("1000", program.getMunicipality().getPostalCode());
+        assertEquals(PROGRAM_NAME_BRUXELLES, program.getName());
     }
 
     @Test
@@ -93,6 +86,9 @@ public class ProgramTest extends DBBootStrapper {
         assertEquals(expectedPostalCode, program.getMunicipality().getPostalCode());
 
     }
+
+
+
 
 }
 
