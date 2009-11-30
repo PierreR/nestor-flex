@@ -3,12 +3,13 @@ package srv;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.matcher.Matchers;
 import com.wideplay.warp.persist.PersistenceService;
 import com.wideplay.warp.persist.UnitOfWork;
 import com.wideplay.warp.persist.jpa.JpaUnit;
 import dao.CompanyQ;
-import entity.Municipality;
+import dao.Picker;
+import entity.Address;
+import entity.Bureau;
 import entity.Program;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
@@ -24,6 +25,7 @@ import java.sql.Date;
  * I have never found a way to do this with JUnit ...
  *
  * It is the responsability of every sub TestClasses to create its own fixtures (using @BeforeClass)
+ * Common fixtures should not be updated by specific tests !
  *
  * Guice injector is made available at the package level as a static variable.
  *  
@@ -40,7 +42,7 @@ public class DBBootStrapper implements ITestListener {
         injector = Guice.createInjector(PersistenceService.usingJpa()
                 .across(UnitOfWork.TRANSACTION)
              //   .forAll(Matchers.any())
-                .addAccessor(dao.Program.class).addAccessor(dao.Utils.class)
+                .addAccessor(dao.Program.class).addAccessor(Picker.class)
                 .addAccessor(CompanyQ.class)
                 .buildModule(),
                 new AbstractModule() {
@@ -79,13 +81,17 @@ public class DBBootStrapper implements ITestListener {
         Program program = new Program();
         program.setName("program.name");
 
+        Bureau bureau = new Bureau();
+        bureau.setName("program.bureau.name");
+        Address address = new Address();
+        address.setPostalCode("program.bureau.address.postalCode");
+        bureau.setAddress(address);
+
+        em.persist(bureau);
+
+        program.setBureau(bureau);
+
         em.persist(program);
-
-        Municipality municipality = new Municipality();
-        municipality.setName("municipality.name");
-        municipality.setPostalCode("municipality.postalCode");
-
-        em.persist(municipality);
         em.getTransaction().commit();
     }
 

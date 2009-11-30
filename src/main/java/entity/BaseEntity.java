@@ -1,6 +1,11 @@
 package entity;
 
-import javax.persistence.*;
+import Utils.StringUtils;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -9,7 +14,7 @@ import java.util.Date;
  */
 
 @MappedSuperclass
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
     @Id @GeneratedValue
     Integer id;
     String name;
@@ -65,11 +70,15 @@ public abstract class BaseEntity {
 
     @Override
     public int hashCode() {
-        return id;
+        return id == null ? super.hashCode() : id;
     }
 
     @Override
     public String toString() {
-        return getName() != null ? getName() + " - " + super.toString() : super.toString();
+        if (StringUtils.isEmpty(getName())) {
+            return super.toString();
+        } else {
+            return getName() + " - " + super.toString();
+        }
     }
 }

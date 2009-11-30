@@ -19,10 +19,10 @@
         </properties>
     </destination>
 
-    <destination id="municipality">
+    <destination id="picker">
         <properties>
             <factory>GuiceFactory</factory>
-            <source>srv.MunicipalityService</source>
+            <source>srv.PickerService</source>
         </properties>
     </destination>
 

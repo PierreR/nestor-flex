@@ -7,8 +7,11 @@ import com.google.inject.servlet.ServletModule;
 import com.wideplay.warp.persist.PersistenceService;
 import com.wideplay.warp.persist.UnitOfWork;
 import com.wideplay.warp.persist.jpa.JpaUnit;
+import dao.Picker;
+import entity.Recipient;
 import flex.messaging.MessageBrokerServlet;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletContextEvent;
 
 /**
@@ -22,9 +25,9 @@ public class ServletListener extends GuiceServletContextListener {
     @Override
     protected Injector getInjector() {
         Injector injector = Guice.createInjector(PersistenceService.usingJpa()
-                .across(UnitOfWork.TRANSACTION)
+                .across(UnitOfWork.REQUEST)
                 .forAll(Matchers.any())
-                .addAccessor(dao.Program.class).addAccessor(dao.Utils.class) // try to group common interfaces here !!
+                .addAccessor(dao.Program.class).addAccessor(Picker.class) // try to group common interfaces here !!
                 .buildModule(),
                 new ServletModule() {
                     @Override
@@ -43,7 +46,27 @@ public class ServletListener extends GuiceServletContextListener {
 
         injector.getInstance(PersistenceService.class).start();
 
+        // I guess we remove this in production ...
+        createTestData(injector.getInstance(EntityManager.class));
+
         return injector;
+
+
+    }
+
+    private void createTestData(EntityManager em) {
+        em.getTransaction().begin();
+
+        Recipient recipient = new Recipient();
+
+        recipient.setName_fr("Bruxelles");
+        recipient.setName_nl("Brussels");
+        recipient.setPostalCode("1000");
+
+        em.persist(recipient);
+
+        em.getTransaction().commit();
+
 
 
     }

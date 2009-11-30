@@ -7,24 +7,37 @@
         import mx.rpc.events.ResultEvent;
         import mx.managers.PopUpManager;
 
-        import nestor.component.MunicipalityPicker;
+        import nestor.component.*;
+        import nestor.model.Bureau;
         import nestor.model.Program;
+        import nestor.model.Recipient;
 
         [Bindable]
         public var program:Program = new Program();
 
         [Bindable]
-        public var municipalities:ArrayCollection;
+        public var recipients:ArrayCollection;
+
+        [Bindable]
+        public var bureaus:ArrayCollection;
 
         private function initApp(event:FlexEvent):void {
             trace(resourceManager.getLocales())
-            municipalityService.listAllMunicipalities();
+            pickerService.listAllBureaus();
+            pickerService.listAllRecipients();
         }
 
-        private function initResult(event:ResultEvent):void
+        private function initRecipients(event:ResultEvent):void
         {
-            municipalities = event.result as ArrayCollection
+            recipients = event.result as ArrayCollection;
+            //trace(recipients[0].id);
         }
+
+        private function initBureaus(event:ResultEvent):void
+        {
+            bureaus = event.result as ArrayCollection;
+        }
+
 
         private function search():void {
             srv.findByName(searchText.text);
@@ -34,7 +47,8 @@
             // Hopefully this will be gone in Flex 4 ...
             program.name = programName.text;
             program.managerName = managerName.text;
-            program.bureauName = bureauName.text;
+            program.recipient = Recipient(recipient.selectedItem)
+           // program.bureau = Bureau(bureau.selectedItem)
             program.bureauDesignationDate = bureauDesignationDate.selectedDate;
             program.councilDate = councilDate.selectedDate;
             program.managerDesignationDate = managerDesignationDate.selectedDate;
@@ -44,8 +58,8 @@
         private function createResult(event:ResultEvent):void
         {
             program = event.result as Program;
-            var _creationDate:String = program.modifiedDate != null ? program.modifiedDate.toLocaleDateString() : null;
-            var _modifiedDate:String = program.modifiedDate != null ? program.modifiedDate.toLocaleDateString() : null;
+            var _creationDate:String = program.creationDate != null ? program.creationDate.toLocaleTimeString() : null;
+            var _modifiedDate:String = program.modifiedDate != null ? program.modifiedDate.toLocaleTimeString() : null;
             if (_creationDate != null) {
                 creationDate.text = " Créé le " + _creationDate;
             }
@@ -56,8 +70,13 @@
             ;
         }
 
-        private function showMunicipalityPicker(evt:MouseEvent):void {
-            PopUpManager.createPopUp(this, MunicipalityPicker, true);
+        private function showBureauPicker(evt:MouseEvent):void {
+            PopUpManager.createPopUp(this, BureauPicker, true);
+            trace("after");
+        }
+
+        private function showRecipientPicker(evt:MouseEvent):void {
+            PopUpManager.createPopUp(this, RecipientPicker, true);
             trace("after");
         }
 
@@ -68,11 +87,11 @@
     <mx:RemoteObject id="srv" destination="program">
         <mx:method name="save" result="createResult(event)"/>
         <mx:method name="findByName" result="createResult(event)"/>
-        <mx:method name="listAllMunicipalities" result="initResult(event)"/>
     </mx:RemoteObject>
 
-    <mx:RemoteObject id="municipalityService" destination="municipality">
-        <mx:method name="listAllMunicipalities" result="initResult(event)"/>
+    <mx:RemoteObject id="pickerService" destination="picker">
+        <mx:method name="listAllRecipients" result="initRecipients(event)"/>
+        <mx:method name="listAllBureaus" result="initBureaus(event)"/>
     </mx:RemoteObject>
 
     <mx:Box>
@@ -84,33 +103,35 @@
         <mx:Label id="creationDate" text="{program.creationDate}"/>
         <mx:Label id="modificationDate" text="{program.modifiedDate}"/>
         <mx:Form>
-            <mx:FormHeading label="Program crud"/>
-
-            <mx:FormItem label="Nom:">
-                <mx:TextInput id="programName" text="{program.name}"/>
-            </mx:FormItem>
-            <mx:Box direction="horizontal" borderStyle="solid"
-                    paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10">
-                <mx:FormItem label="Municipality:">
-                    <mx:ComboBox id="municipality" dataProvider="{municipalities}"/>
+            <mx:VBox>
+                <mx:FormItem label="Nom:">
+                    <mx:TextInput id="programName" text="{program.name}"/>
                 </mx:FormItem>
-                <mx:Button click="showMunicipalityPicker(event)"></mx:Button>
-            </mx:Box>
-            <mx:FormItem label="Nom du chef de projet:">
-                <mx:TextInput id="managerName" text="{program.managerName}"/>
-            </mx:FormItem>
-            <mx:FormItem label="Nom du bureau d'étude:">
-                <mx:TextInput id="bureauName" text="{program.bureauName}"/>
-            </mx:FormItem>
-            <mx:FormItem label="Désignation du bureau d'étude:">
-                <mx:DateField id="bureauDesignationDate" selectedDate="{program.bureauDesignationDate}"/>
-            </mx:FormItem>
-            <mx:FormItem label="Conseil communal:">
-                <mx:DateField id="councilDate" selectedDate="{program.councilDate}"/>
-            </mx:FormItem>
-            <mx:FormItem label="Désignation du chef de projet:">
-                <mx:DateField id="managerDesignationDate" selectedDate="{program.managerDesignationDate}"/>
-            </mx:FormItem>
+                <mx:HBox>
+                    <mx:FormItem label="Recipient:">
+                        <mx:ComboBox id="recipient" dataProvider="{recipients}"/>
+                    </mx:FormItem>
+                    <mx:Button click="showRecipientPicker(event)"></mx:Button>
+                </mx:HBox>
+                <mx:FormItem label="Nom du chef de projet:">
+                    <mx:TextInput id="managerName" text="{program.managerName}"/>
+                </mx:FormItem>
+                <mx:HBox>
+                    <mx:FormItem label="Bureau:">
+                        <mx:ComboBox id="bureau" dataProvider="{bureaus}"/>
+                    </mx:FormItem>
+                    <mx:Button click="showBureauPicker(event)"></mx:Button>
+                </mx:HBox>
+                <mx:FormItem label="Désignation du bureau d'étude:">
+                    <mx:DateField id="bureauDesignationDate" selectedDate="{program.bureauDesignationDate}"/>
+                </mx:FormItem>
+                <mx:FormItem label="Conseil communal:">
+                    <mx:DateField id="councilDate" selectedDate="{program.councilDate}"/>
+                </mx:FormItem>
+                <mx:FormItem label="Désignation du chef de projet:">
+                    <mx:DateField id="managerDesignationDate" selectedDate="{program.managerDesignationDate}"/>
+                </mx:FormItem>
+            </mx:VBox>
         </mx:Form>
     </mx:Panel>
 

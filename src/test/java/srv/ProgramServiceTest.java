@@ -1,8 +1,9 @@
 package srv;
 
-import entity.Municipality;
+import dao.Picker;
 import entity.Program;
 import enu.ContractType;
+import entity.Recipient;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -20,22 +21,33 @@ public class ProgramServiceTest extends DBBootStrapper {
     private ProgramService srv;
     private dao.Program dao;
     private static final String PROGRAM_NAME_BRUXELLES = "program.name.bruxelles";
+    private PickerService pickerService;
 
     @BeforeClass
     public void fixture() {
         EntityManager em = injector.getInstance(EntityManager.class);
         em.getTransaction().begin();
 
-        Municipality bruxelles = new Municipality();
-        bruxelles.setName("Bruxelles");
-        bruxelles.setPostalCode("1000");
-
         Program.Planning planning = new Program.Planning();
         planning.setDate(EXPECTED_DAY_DATE);
 
+        Recipient ixelles = new Recipient();
+        ixelles.setName_fr("Ixelles");
+        ixelles.setName_nl("Elsene");
+        ixelles.setPostalCode("1050");
+
+        em.persist(ixelles);
+
+        Recipient bruxelles = new Recipient();
+        bruxelles.setName_fr("Bruxelles");
+        bruxelles.setName_nl("Brussels");
+        bruxelles.setPostalCode("1000");
+
+        em.persist(bruxelles);
+
         Program program = new Program();
         program.setName(PROGRAM_NAME_BRUXELLES);
-        program.setMunicipality(bruxelles);
+        program.setRecipient(bruxelles);
         em.persist(program);
 
         em.getTransaction().commit();
@@ -46,6 +58,7 @@ public class ProgramServiceTest extends DBBootStrapper {
     public void preTest() {
         srv = injector.getInstance(ProgramService.class);
         dao = injector.getInstance(dao.Program.class);
+        pickerService = injector.getInstance(PickerService.class);
     }
 
 
@@ -73,21 +86,20 @@ public class ProgramServiceTest extends DBBootStrapper {
 
     @Test
     public void find() {
-        Program program = dao.findByMunipality("Bruxelles");
-        assertEquals(PROGRAM_NAME_BRUXELLES, program.getName());
+        Program program = dao.findByBureau("program.bureau.name");
+        assertEquals("program.name", program.getName());
+        assertEquals("program.bureau.address.postalCode", program.getBureau().getAddress().getPostalCode());
     }
 
     @Test
     public void update() {
-        Program program = dao.findByMunipality("Bruxelles");
-        String expectedPostalCode = "newPostalCode";
-        program.getMunicipality().setPostalCode(expectedPostalCode);
+        Program program = srv.findByRecipient("Bruxelles", "fr");
+        Recipient ixelles = pickerService.findRecipientByName("Ixelles", "fr");
+        program.setRecipient(ixelles);
         program = srv.save(program);
-        assertEquals(expectedPostalCode, program.getMunicipality().getPostalCode());
+        assertEquals(ixelles.getPostalCode(), program.getRecipient().getPostalCode());
 
     }
-
-
 
 
 }

@@ -2,7 +2,6 @@ package dao;
 
 import com.google.inject.name.Named;
 import com.wideplay.warp.persist.dao.Finder;
-import entity.Company;
 import entity.Employee;
 
 import java.util.Collection;

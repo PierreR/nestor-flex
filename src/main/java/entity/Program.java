@@ -1,6 +1,7 @@
 package entity;
 
 import enu.ContractType;
+import entity.Recipient;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,15 +14,17 @@ import java.util.Set;
 @Entity
 public class Program extends BaseEntity {
     String managerName;                // name of the project manager
-            String bureauName;                 // "bureau d'étude"
-    Date grantDate;
-    Date notificationDate;              // notification to the commune
-            Date managerDesignationDate;        // designation of the project manager
-            Date councilDate;                   //  commune council
-            Date bureauDesignationDate;
+    Date grantDate,
+         notificationDate,              // notification to the commune
+         managerDesignationDate,        // designation of the project manager
+         councilDate,                   //  commune council
+         bureauDesignationDate;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    Municipality municipality;
+    @OneToOne
+    Recipient recipient;  // body that will benefit from the Program ("commune", "cpas", ...)
+
+    @OneToOne
+    Bureau bureau;       // bureau d'étude
 
     @Enumerated
     ContractType contractType = ContractType.AREA_CONTRACT;
@@ -31,7 +34,7 @@ public class Program extends BaseEntity {
 
     public String getReference() {
         return getContractType().name() + getContractType().name() +
-               (getMunicipality() != null ? getMunicipality().getPostalCode() : "") ;
+               (getRecipient() != null ? getRecipient().getPostalCode() : "") ;
     }
 
 
@@ -41,14 +44,6 @@ public class Program extends BaseEntity {
 
     public void setManagerName(String managerName) {
         this.managerName = managerName;
-    }
-
-    public String getBureauName() {
-        return bureauName;
-    }
-
-    public void setBureauName(String bureauName) {
-        this.bureauName = bureauName;
     }
 
     public Date getGrantDate() {
@@ -91,13 +86,13 @@ public class Program extends BaseEntity {
         this.bureauDesignationDate = bureauDesignationDate;
     }
 
-    public Municipality getMunicipality() {
-        return municipality;
+    public Recipient getRecipient() {
+        return recipient;
     }
 
-    public void setMunicipality(Municipality municipality) {
-        assert municipality != null;
-        this.municipality = municipality;
+    public void setRecipient(Recipient recipient) {
+        assert recipient != null;
+        this.recipient = recipient;
     }
 
     public ContractType getContractType() {
@@ -114,6 +109,14 @@ public class Program extends BaseEntity {
 
     public void setPlanning(Set<Planning> planning) {
         this.planning = planning;
+    }
+
+    public Bureau getBureau() {
+        return bureau;
+    }
+
+    public void setBureau(Bureau bureau) {
+        this.bureau = bureau;
     }
 
     @Entity()
