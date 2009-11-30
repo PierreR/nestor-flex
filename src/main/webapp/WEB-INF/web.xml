@@ -6,7 +6,7 @@
          version="2.5">
 
     <listener>
-      <listener-class>web.ServletListener</listener-class>
+      <listener-class>nestor.web.ServletListener</listener-class>
     </listener>
 
     <filter>

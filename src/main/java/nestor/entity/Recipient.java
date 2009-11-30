@@ -1,6 +1,6 @@
-package entity;
+package nestor.entity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
 
 /**
  * Date: Nov 30, 2009

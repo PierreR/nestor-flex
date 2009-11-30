@@ -1,4 +1,4 @@
-package entity;
+package nestor.entity;
 
 import javax.persistence.MappedSuperclass;
 

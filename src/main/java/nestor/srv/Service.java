@@ -1,9 +1,9 @@
-package srv;
+package nestor.srv;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.wideplay.warp.persist.Transactional;
-import entity.BaseEntity;
+import nestor.entity.BaseEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;

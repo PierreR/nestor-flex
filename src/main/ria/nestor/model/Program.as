@@ -4,7 +4,7 @@ package nestor.model{
  * This kind of class should be generated automatically.
  */
 [Bindable]
-[RemoteClass(alias="entity.Program" )]
+[RemoteClass(alias="nestor.entity.Program" )]
 public class Program extends BaseEntity {
 
     public function Program() {

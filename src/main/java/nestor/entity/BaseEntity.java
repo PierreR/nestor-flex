@@ -1,6 +1,6 @@
-package entity;
+package nestor.entity;
 
-import Utils.StringUtils;
+import nestor.utils.StringUtils;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

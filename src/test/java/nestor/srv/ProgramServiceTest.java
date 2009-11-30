@@ -1,9 +1,8 @@
-package srv;
+package nestor.srv;
 
-import dao.Picker;
-import entity.Program;
-import enu.ContractType;
-import entity.Recipient;
+import nestor.entity.Program;
+import nestor.enu.ContractType;
+import nestor.entity.Recipient;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -19,7 +18,7 @@ import static org.testng.AssertJUnit.*;
 public class ProgramServiceTest extends DBBootStrapper {
 
     private ProgramService srv;
-    private dao.Program dao;
+    private nestor.dao.Program dao;
     private static final String PROGRAM_NAME_BRUXELLES = "program.name.bruxelles";
     private PickerService pickerService;
 
@@ -57,7 +56,7 @@ public class ProgramServiceTest extends DBBootStrapper {
     @BeforeTest
     public void preTest() {
         srv = injector.getInstance(ProgramService.class);
-        dao = injector.getInstance(dao.Program.class);
+        dao = injector.getInstance(nestor.dao.Program.class);
         pickerService = injector.getInstance(PickerService.class);
     }
 

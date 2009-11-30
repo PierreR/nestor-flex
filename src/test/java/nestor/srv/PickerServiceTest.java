@@ -1,7 +1,7 @@
-package srv;
+package nestor.srv;
 
-import entity.Bureau;
-import entity.Recipient;
+import nestor.entity.Bureau;
+import nestor.entity.Recipient;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 

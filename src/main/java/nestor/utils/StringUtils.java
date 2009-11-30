@@ -1,9 +1,9 @@
-package Utils;
+package nestor.utils;
 
 import org.testng.annotations.Test;
-import org.testng.annotations.TestInstance;
 
-import static org.testng.AssertJUnit.*;
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
 
 /**
  * Date: Nov 30, 2009

@@ -1,4 +1,4 @@
-package srv;
+package nestor.srv;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -6,11 +6,10 @@ import com.google.inject.Injector;
 import com.wideplay.warp.persist.PersistenceService;
 import com.wideplay.warp.persist.UnitOfWork;
 import com.wideplay.warp.persist.jpa.JpaUnit;
-import dao.CompanyQ;
-import dao.Picker;
-import entity.Address;
-import entity.Bureau;
-import entity.Program;
+import nestor.dao.Picker;
+import nestor.entity.Address;
+import nestor.entity.Bureau;
+import nestor.entity.Program;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -42,8 +41,8 @@ public class DBBootStrapper implements ITestListener {
         injector = Guice.createInjector(PersistenceService.usingJpa()
                 .across(UnitOfWork.TRANSACTION)
              //   .forAll(Matchers.any())
-                .addAccessor(dao.Program.class).addAccessor(Picker.class)
-                .addAccessor(CompanyQ.class)
+                .addAccessor(nestor.dao.Program.class)
+                .addAccessor(Picker.class)
                 .buildModule(),
                 new AbstractModule() {
                     protected void configure() {

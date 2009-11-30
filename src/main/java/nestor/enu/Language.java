@@ -1,4 +1,4 @@
-package enu;
+package nestor.enu;
 
 /**
  * Date: Nov 30, 2009

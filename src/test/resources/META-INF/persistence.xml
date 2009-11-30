@@ -3,11 +3,11 @@
 
     <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>entity.Address</class>
-        <class>entity.Bureau</class>
-        <class>entity.Program</class>
-        <class>entity.Program$Planning</class>
-        <class>entity.Recipient</class>
+        <class>nestor.entity.Address</class>
+        <class>nestor.entity.Bureau</class>
+        <class>nestor.entity.Program</class>
+        <class>nestor.entity.Program$Planning</class>
+        <class>nestor.entity.Recipient</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>

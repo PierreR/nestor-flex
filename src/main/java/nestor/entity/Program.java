@@ -1,7 +1,6 @@
-package entity;
+package nestor.entity;
 
-import enu.ContractType;
-import entity.Recipient;
+import nestor.enu.ContractType;
 
 import javax.persistence.*;
 import java.util.Date;

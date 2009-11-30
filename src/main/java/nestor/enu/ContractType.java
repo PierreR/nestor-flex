@@ -1,4 +1,4 @@
-package enu;
+package nestor.enu;
 
 /**
  * Is this a translatable enum ?

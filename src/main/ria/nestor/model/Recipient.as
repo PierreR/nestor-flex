@@ -1,7 +1,7 @@
 package nestor.model {
 
 [Bindable]
-[RemoteClass(alias="entity.Recipient")]
+[RemoteClass(alias="nestor.entity.Recipient")]
 public class Recipient extends Picker
 {
     public function Recipient()  {

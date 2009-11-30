@@ -1,4 +1,4 @@
-package web;
+package nestor.web;
 
 import com.google.inject.Injector;
 import flex.messaging.FactoryInstance;

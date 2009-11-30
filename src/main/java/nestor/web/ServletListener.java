@@ -1,4 +1,4 @@
-package web;
+package nestor.web;
 
 import com.google.inject.*;
 import com.google.inject.matcher.Matchers;
@@ -7,8 +7,8 @@ import com.google.inject.servlet.ServletModule;
 import com.wideplay.warp.persist.PersistenceService;
 import com.wideplay.warp.persist.UnitOfWork;
 import com.wideplay.warp.persist.jpa.JpaUnit;
-import dao.Picker;
-import entity.Recipient;
+import nestor.dao.Picker;
+import nestor.entity.Recipient;
 import flex.messaging.MessageBrokerServlet;
 
 import javax.persistence.EntityManager;
@@ -27,7 +27,7 @@ public class ServletListener extends GuiceServletContextListener {
         Injector injector = Guice.createInjector(PersistenceService.usingJpa()
                 .across(UnitOfWork.REQUEST)
                 .forAll(Matchers.any())
-                .addAccessor(dao.Program.class).addAccessor(Picker.class) // try to group common interfaces here !!
+                .addAccessor(nestor.dao.Program.class).addAccessor(Picker.class) // try to group common interfaces here !!
                 .buildModule(),
                 new ServletModule() {
                     @Override

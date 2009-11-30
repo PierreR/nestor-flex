@@ -1,9 +1,11 @@
-package srv;
+package nestor.srv;
 
 import com.google.inject.Inject;
-import dao.Picker;
-import entity.*;
-import enu.Language;
+import nestor.dao.Picker;
+import nestor.entity.Bureau;
+import nestor.entity.PickerEntity;
+import nestor.entity.Recipient;
+import nestor.enu.Language;
 
 import java.util.Set;
 

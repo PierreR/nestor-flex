@@ -1,4 +1,4 @@
-package dao;
+package nestor.dao;
 
 import com.google.inject.name.Named;
 import com.wideplay.warp.persist.dao.Finder;
@@ -14,19 +14,19 @@ import java.util.Set;
 public interface Program {
 
     @Finder(query = "from Program", returnAs = HashSet.class)
-    public Set<entity.Program> listAll();
+    public Set<nestor.entity.Program> listAll();
 
     @Finder(query = "select p from Program p where p.recipient.name_fr=:name")
-    public entity.Program findByFRRecipient(@Named("name") String name);
+    public nestor.entity.Program findByFRRecipient(@Named("name") String name);
 
     @Finder(query = "select p from Program p where p.recipient.name_nl=:name")
-    public entity.Program findByNLRecipient(@Named("name") String name);
+    public nestor.entity.Program findByNLRecipient(@Named("name") String name);
 
     
     @Finder(query = "select p from Program p where p.bureau.name=:name")
-    public entity.Program findByBureau(@Named("name") String name);
+    public nestor.entity.Program findByBureau(@Named("name") String name);
 
     @Finder(query = "from Program p where p.name=:name")
-    public entity.Program findByName(@Named("name") String name);
+    public nestor.entity.Program findByName(@Named("name") String name);
 }
 

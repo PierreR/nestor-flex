@@ -1,9 +1,9 @@
-package dao;
+package nestor.dao;
 
 import com.google.inject.name.Named;
 import com.wideplay.warp.persist.dao.Finder;
-import entity.Bureau;
-import entity.Recipient;
+import nestor.entity.Bureau;
+import nestor.entity.Recipient;
 
 import java.util.HashSet;
 import java.util.Set;

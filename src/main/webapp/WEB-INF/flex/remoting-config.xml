@@ -15,14 +15,14 @@
     <destination id="program">
         <properties>
             <factory>GuiceFactory</factory>
-            <source>srv.ProgramService</source>
+            <source>nestor.srv.ProgramService</source>
         </properties>
     </destination>
 
     <destination id="picker">
         <properties>
             <factory>GuiceFactory</factory>
-            <source>srv.PickerService</source>
+            <source>nestor.srv.PickerService</source>
         </properties>
     </destination>
 

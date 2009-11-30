@@ -2,7 +2,7 @@
 <services-config>
 
     <factories>
-        <factory id="GuiceFactory" class="web.GuiceFactory"/>
+        <factory id="GuiceFactory" class="nestor.web.GuiceFactory"/>
     </factories>
 
     <services>

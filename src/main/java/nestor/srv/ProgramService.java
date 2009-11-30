@@ -1,11 +1,10 @@
-package srv;
+package nestor.srv;
 
 
 import com.google.inject.Inject;
-import entity.Program;
-import enu.Language;
+import nestor.entity.Program;
+import nestor.enu.Language;
 
-import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -15,17 +14,17 @@ import java.util.Set;
 public class ProgramService extends Service<Program> {
 
     @Inject
-    dao.Program dao;
+    nestor.dao.Program dao;
 
-    public Set<entity.Program> listAll() {
+    public Set<nestor.entity.Program> listAll() {
         return dao.listAll();
     }
 
-    public entity.Program findByName(String name) {
+    public nestor.entity.Program findByName(String name) {
         return dao.findByName(name);
     }
 
-    public entity.Program findByRecipient(String recipientName, String languageToken) {
+    public nestor.entity.Program findByRecipient(String recipientName, String languageToken) {
         switch(Language.valueOf(languageToken.toUpperCase())) {
             case FR:
                 return dao.findByFRRecipient(recipientName);
