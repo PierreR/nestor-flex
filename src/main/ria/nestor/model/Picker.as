@@ -1,6 +1,7 @@
 package nestor.model {
 import mx.resources.ResourceManager;
 
+
 public class Picker extends BaseEntity {
     public function Picker() {
     }

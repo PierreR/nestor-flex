@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml">
+        <mx:Form id="pickerForm">
+            <mx:VBox>
+                <mx:FormHeading label="Create a new"/>
+                <mx:HBox id="boxId">
+                    <mx:FormItem label="French Name:">
+                        <mx:TextInput id="name_fr"/>
+                    </mx:FormItem>
+                    <mx:FormItem label="NL Name:">
+                        <mx:TextInput id="name_nl"/>
+                    </mx:FormItem>
+                </mx:HBox>
+            </mx:VBox>
+        </mx:Form>
+        <mx:Button id="saveButtonId" label="Save" bottom="10" left="10" height="36" width="63"/>
+        <mx:Button id="cancelButtonId" label="Cancel" bottom="10" left="10" height="36" width="63"/>
+ </mx:VBox>

@@ -48,7 +48,7 @@
             program.name = programName.text;
             program.managerName = managerName.text;
             program.recipient = Recipient(recipient.selectedItem)
-           // program.bureau = Bureau(bureau.selectedItem)
+            // program.bureau = Bureau(bureau.selectedItem)
             program.bureauDesignationDate = bureauDesignationDate.selectedDate;
             program.councilDate = councilDate.selectedDate;
             program.managerDesignationDate = managerDesignationDate.selectedDate;
