@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<!--
+    This is an abstract template for all pickers dealing with common fields name_fr, name_nl
+    Don't try to do this with AS/layout because it gets too messy.
+-->
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" initialize="init()">
+
+    <mx:Script>
+    <![CDATA[         
+        import mx.managers.PopUpManager;
+
+        import nestor.model.Picker;
+
+        [ArrayElementType("mx.core.UIComponent")]
+        public var extra:Array;
+
+        protected var picker:Picker;
+
+        private function init():void {
+            for (var i:int = 0; i < extra.length; i++)
+                form.addChildAt(extra[i], i + 2);
+        }
+
+        protected function save():void {
+            picker.name_fr = name_fr.text;
+            picker.name_nl = name_nl.text;
+            srv.save(picker);
+
+        }
+
+        private function cancel():void {
+            PopUpManager.removePopUp(this);
+        }
+
+        private function resultHandler(event:Event):void {
+            PopUpManager.removePopUp(this);
+        }
+
+
+    ]]>
+    </mx:Script>
+
+    <mx:RemoteObject id="srv" destination="picker">
+        <mx:method name="save" result="resultHandler(event)"/>
+    </mx:RemoteObject>
+
+    <mx:Form id="form">
+        <mx:FormItem label="French Name:">
+            <mx:TextInput id="name_fr"/>
+        </mx:FormItem>
+        <mx:FormItem label="NL Name:">
+            <mx:TextInput id="name_nl"/>
+        </mx:FormItem>
+        <mx:FormItem direction="horizontal">
+            <mx:Button id="cancelButtonId" click="cancel()" label="Cancel"/>
+            <mx:Button id="saveButtonId" click="save()" label="Save"/>
+        </mx:FormItem>
+    </mx:Form>
+</mx:TitleWindow>

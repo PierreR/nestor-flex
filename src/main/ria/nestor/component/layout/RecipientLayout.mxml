@@ -1,6 +1,0 @@
-<?xml version="1.0" ?>
-<mx:Container xmlns:mx="http://www.adobe.com/2006/mxml">
-    <mx:FormItem label="Code Postal:">
-        <mx:TextInput id="postalCode"/>
-    </mx:FormItem>
-</mx:Container>

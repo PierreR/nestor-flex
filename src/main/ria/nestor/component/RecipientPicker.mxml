@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<nestor.component:PickerTemplate xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:nestor.component="nestor.component.*">
+
+   <mx:Script>
+       import nestor.model.Recipient;
+
+       protected override function save():void {
+        picker = new Recipient();
+        Recipient(picker).postalCode = postalCode.text;
+        super.save();
+    }
+
+    </mx:Script>
+    <nestor.component:extra>
+        <mx:FormItem label="Code Postal:" xmlns:mx="http://www.adobe.com/2006/mxml">
+            <mx:TextInput id="postalCode"/>
+        </mx:FormItem>
+    </nestor.component:extra>
+
+</nestor.component:PickerTemplate>

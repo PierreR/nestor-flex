@@ -3,7 +3,10 @@
 
     <mx:Script><![CDATA[
         import mx.collections.ArrayCollection;
+        import mx.containers.TitleWindow;
+        import mx.core.IFlexDisplayObject;
         import mx.events.FlexEvent;
+        import mx.managers.PopUpManagerChildList;
         import mx.rpc.events.ResultEvent;
         import mx.managers.PopUpManager;
 
@@ -71,15 +74,29 @@
         }
 
         private function showBureauPicker(evt:MouseEvent):void {
-            PopUpManager.createPopUp(this, BureauPicker, true);
+            var popup = PopUpManager.createPopUp(this, BureauPicker, true);
+            calcPopUpPos(popup, evt);
             trace("after");
         }
 
         private function showRecipientPicker(evt:MouseEvent):void {
-            PopUpManager.createPopUp(this, RecipientPicker, true);
+            var popup = PopUpManager.createPopUp(this, RecipientPicker, true, PopUpManagerChildList.POPUP);
+            calcPopUpPos(popup, evt);
             trace("after");
         }
 
+        /**
+         * This come from Flex 2 browser component. It looks overcomplicated ...
+         */
+        private function calcPopUpPos(popup:IFlexDisplayObject, evt:MouseEvent) {
+            var point:Point = new Point();
+
+            point.x = evt.target.x;
+            point.y = evt.target.y;
+            point = evt.target.localToGlobal(point);
+            popup.x = point.x + 5;
+            popup.y = point.y + 5;
+        }
 
         ]]>
     </mx:Script>
