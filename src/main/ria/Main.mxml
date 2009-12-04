@@ -1,19 +1,30 @@
 <?xml version="1.0" ?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="initApp(event)">
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:nestor="nestor.component.*"
+                creationComplete="initApp(event)">
+
+    <mx:Metadata>
+        [ResourceBundle("resources")]
+    </mx:Metadata>
 
     <mx:Script><![CDATA[
         import mx.collections.ArrayCollection;
-        import mx.containers.TitleWindow;
         import mx.core.IFlexDisplayObject;
         import mx.events.FlexEvent;
-        import mx.managers.PopUpManagerChildList;
-        import mx.rpc.events.ResultEvent;
+        import mx.events.ValidationResultEvent;
         import mx.managers.PopUpManager;
+        import mx.managers.PopUpManagerChildList;
+        import mx.resources.ResourceManager;
+        import mx.rpc.events.ResultEvent;
 
         import nestor.component.*;
-        import nestor.model.Bureau;
-        import nestor.model.Program;
-        import nestor.model.Recipient;
+        import nestor.model.*;
+
+
+        [Bindable]
+        public function getString(key:String):String {
+            return resourceManager.getString("resources", key);
+        }
+
 
         [Bindable]
         public var program:Program = new Program();
@@ -47,11 +58,14 @@
         }
 
         private function save():void {
+            var validationResult:Array = Validator.validateAll([nameValidator, recipientValidator]);
+            if (validationResult.length > 0) return;
+
             // Hopefully this will be gone in Flex 4 ...
             program.name = programName.text;
             program.managerName = managerName.text;
             program.recipient = Recipient(recipient.selectedItem)
-            // program.bureau = Bureau(bureau.selectedItem)
+            program.bureau = Bureau(bureau.selectedItem)
             program.bureauDesignationDate = bureauDesignationDate.selectedDate;
             program.councilDate = councilDate.selectedDate;
             program.managerDesignationDate = managerDesignationDate.selectedDate;
@@ -105,27 +119,36 @@
         <mx:method name="listAllBureaus" result="initBureaus(event)"/>
     </mx:RemoteObject>
 
-    <mx:Box>
+    <mx:Validator id="nameValidator" source="{programName}" property="text" required="true"/>
+    <mx:Validator id="recipientValidator" source="{recipient}" property="selectedItem" required="true"/>
+
+
+    <mx:HBox horizontalAlign="right" width="100%">
         <mx:TextInput id="searchText" width="100"/>
-        <mx:Button label="@Resource(bundle='resources', key='search')" click="search()"/>
-    </mx:Box>
-    <mx:Panel title="Program" width="100%" height="100%">
+        <mx:Button label="{resourceManager.getString('resources', 'search')}" click="search()"/>
+        <mx:Spacer width="100"/>
+        <nestor:Locale/>
+    </mx:HBox>
+    <mx:Panel title="{resourceManager.getString('resources', 'program')}" width="100%" height="100%">
 
         <mx:Label id="creationDate" text="{program.creationDate}"/>
         <mx:Label id="modificationDate" text="{program.modifiedDate}"/>
-        <mx:Form>
-            <mx:FormItem label="Nom">
+        <mx:Form id="formId">
+            <mx:FormItem label="{resourceManager.getString('resources', 'name')}" required="true">
                 <mx:TextInput id="programName" text="{program.name}"/>
             </mx:FormItem>
-            <mx:FormItem direction="horizontal" label="Recipient">
-                <mx:ComboBox id="recipient" dataProvider="{recipients}"/>
+            <mx:FormItem direction="horizontal" label="{resourceManager.getString('resources', 'recipient')}"
+                         required="true">
+                <mx:ComboBox id="recipient" dataProvider="{recipients}"
+                             prompt="{resourceManager.getString('resources', 'prompt')}"/>
                 <mx:Button icon="@Embed('icon/addlink.gif')" click="showRecipientPicker(event)"></mx:Button>
             </mx:FormItem>
             <mx:FormItem label="Nom du chef de projet">
                 <mx:TextInput id="managerName" text="{program.managerName}"/>
             </mx:FormItem>
-            <mx:FormItem direction="horizontal" label="Bureau">
-                <mx:ComboBox id="bureau" dataProvider="{bureaus}"/>
+            <mx:FormItem direction="horizontal" label="{getString('bureau')}">
+                <mx:ComboBox id="bureau" dataProvider="{bureaus}"
+                             prompt="{resourceManager.getString('resources', 'prompt')}"/>
                 <mx:Button icon="@Embed('icon/addlink.gif')" click="showBureauPicker(event)"></mx:Button>
             </mx:FormItem>
             <mx:FormItem label="Désignation du bureau d'étude:">
@@ -137,10 +160,11 @@
             <mx:FormItem label="Désignation du chef de projet">
                 <mx:DateField id="managerDesignationDate" selectedDate="{program.managerDesignationDate}"/>
             </mx:FormItem>
-            <mx:FormItem><mx:Button label="Save" click="save()"/></mx:FormItem>
+            <mx:FormItem>
+                <mx:Button label="Save" click="save()"/>
+            </mx:FormItem>
         </mx:Form>
     </mx:Panel>
-
 
 
 </mx:Application>

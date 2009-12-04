@@ -6,7 +6,7 @@
     <option name="OUTPUT_FILE_NAME" value="ria.swf" />
     <option name="TARGET_PLAYER_VERSION" value="9.0.124" />
     <option name="USE_LOCALE_SETTINGS" value="true" />
-    <option name="LOCALE" value="fr_BE" />
+    <option name="LOCALE" value="fr_BE,nl_BE" />
     <option name="VERSION" value="3" />
     <option name="SERVER_TECHNOLOGY" value="BlazeDS" />
     <option name="PATH_TO_SERVICES_CONFIG_XML" value="src/main/webapp/WEB-INF/flex/services-config.xml" />
@@ -17,6 +17,7 @@
     <content url="file://$MODULE_DIR$/../resources/ria">
       <sourceFolder url="file://$MODULE_DIR$/../resources/ria" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../resources/ria/locale/fr_BE" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../resources/ria/locale/nl_BE" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />

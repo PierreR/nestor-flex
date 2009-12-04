@@ -8,7 +8,6 @@ public class Picker extends BaseEntity {
     public var name_fr:String;
     public var name_nl:String;
 
-
     public function get label():String {
         var locale:String = ResourceManager.getInstance().localeChain[0];
         if (locale == "fr_BE") {
