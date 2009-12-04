@@ -16,9 +16,10 @@
 
         protected var picker:Picker;
 
-        private function init():void {
-            for (var i:int = 0; i < extra.length; i++)
+        protected function init():void {
+            for (var i:int = 0; i < extra.length; i++) {
                 form.addChildAt(extra[i], i + 2);
+            }
         }
 
         protected function save():void {
@@ -45,10 +46,10 @@
     </mx:RemoteObject>
 
     <mx:Form id="form">
-        <mx:FormItem label="French Name:">
+        <mx:FormItem label="Nom">
             <mx:TextInput id="name_fr"/>
         </mx:FormItem>
-        <mx:FormItem label="NL Name:">
+        <mx:FormItem label="Naam">
             <mx:TextInput id="name_nl"/>
         </mx:FormItem>
         <mx:FormItem direction="horizontal">

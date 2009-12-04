@@ -15,7 +15,6 @@ public class Address  {
     Integer id;
 
     String  line,
-            number,
             postalCode,
             municipality; // there is no link between municipality and the entity "Municipality"
 
@@ -33,14 +32,6 @@ public class Address  {
 
     public void setLine(String line) {
         this.line = line;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
     }
 
     public String getPostalCode() {

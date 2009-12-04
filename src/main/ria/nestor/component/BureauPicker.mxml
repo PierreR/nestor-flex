@@ -1,29 +1,39 @@
 <?xml version="1.0" ?>
 <nestor.component:PickerTemplate xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:nestor.component="nestor.component.*">
 
+
     <mx:Script>
         import nestor.model.Address;
         import nestor.model.Bureau;
+
+
+        override protected function init():void {
+            super.init();
+            this.title = "Créer un nouveau bureau d'étude";
+        }
 
         protected override function save():void {
             picker = new Bureau();
             var address:Address = new Address();
             address.line = line.text;
-            address.number = number.text;
             address.postalCode = postalCode.text;
+            address.municipality = municipality.text;
             Bureau(picker).address = address;
             super.save();
         }
 
     </mx:Script>
     <nestor.component:extra>
-        <mx:FormItem label="Address:">
+        <mx:FormItem label="Address" direction="horizontal">
             <mx:TextInput id="line"/>
-            <mx:TextInput id="number"/>
         </mx:FormItem>
-        <mx:FormItem label="Code Postal:">
-            <mx:TextInput id="postalCode"/>
+        <mx:FormItem label="Commune">
+            <mx:TextInput id="municipality"/>
         </mx:FormItem>
+        <mx:FormItem label="Code postal" direction="horizontal">
+        <mx:TextInput id="postalCode" width="20%"/>
+        </mx:FormItem>
+
     </nestor.component:extra>
 
 

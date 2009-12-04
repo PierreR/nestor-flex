@@ -76,26 +76,20 @@
         private function showBureauPicker(evt:MouseEvent):void {
             var popup = PopUpManager.createPopUp(this, BureauPicker, true);
             calcPopUpPos(popup, evt);
-            trace("after");
         }
 
         private function showRecipientPicker(evt:MouseEvent):void {
             var popup = PopUpManager.createPopUp(this, RecipientPicker, true, PopUpManagerChildList.POPUP);
             calcPopUpPos(popup, evt);
-            trace("after");
         }
 
-        /**
-         * This come from Flex 2 browser component. It looks overcomplicated ...
-         */
         private function calcPopUpPos(popup:IFlexDisplayObject, evt:MouseEvent) {
             var point:Point = new Point();
-
-            point.x = evt.target.x;
-            point.y = evt.target.y;
+            point.x = evt.localX;
+            point.y = evt.localY;
             point = evt.target.localToGlobal(point);
-            popup.x = point.x + 5;
-            popup.y = point.y + 5;
+            popup.x = point.x;
+            popup.y = point.y;
         }
 
         ]]>
@@ -120,38 +114,33 @@
         <mx:Label id="creationDate" text="{program.creationDate}"/>
         <mx:Label id="modificationDate" text="{program.modifiedDate}"/>
         <mx:Form>
-            <mx:VBox>
-                <mx:FormItem label="Nom:">
-                    <mx:TextInput id="programName" text="{program.name}"/>
-                </mx:FormItem>
-                <mx:HBox>
-                    <mx:FormItem label="Recipient:">
-                        <mx:ComboBox id="recipient" dataProvider="{recipients}"/>
-                    </mx:FormItem>
-                    <mx:Button click="showRecipientPicker(event)"></mx:Button>
-                </mx:HBox>
-                <mx:FormItem label="Nom du chef de projet:">
-                    <mx:TextInput id="managerName" text="{program.managerName}"/>
-                </mx:FormItem>
-                <mx:HBox>
-                    <mx:FormItem label="Bureau:">
-                        <mx:ComboBox id="bureau" dataProvider="{bureaus}"/>
-                    </mx:FormItem>
-                    <mx:Button click="showBureauPicker(event)"></mx:Button>
-                </mx:HBox>
-                <mx:FormItem label="Désignation du bureau d'étude:">
-                    <mx:DateField id="bureauDesignationDate" selectedDate="{program.bureauDesignationDate}"/>
-                </mx:FormItem>
-                <mx:FormItem label="Conseil communal:">
-                    <mx:DateField id="councilDate" selectedDate="{program.councilDate}"/>
-                </mx:FormItem>
-                <mx:FormItem label="Désignation du chef de projet:">
-                    <mx:DateField id="managerDesignationDate" selectedDate="{program.managerDesignationDate}"/>
-                </mx:FormItem>
-            </mx:VBox>
+            <mx:FormItem label="Nom">
+                <mx:TextInput id="programName" text="{program.name}"/>
+            </mx:FormItem>
+            <mx:FormItem direction="horizontal" label="Recipient">
+                <mx:ComboBox id="recipient" dataProvider="{recipients}"/>
+                <mx:Button icon="@Embed('icon/addlink.gif')" click="showRecipientPicker(event)"></mx:Button>
+            </mx:FormItem>
+            <mx:FormItem label="Nom du chef de projet">
+                <mx:TextInput id="managerName" text="{program.managerName}"/>
+            </mx:FormItem>
+            <mx:FormItem direction="horizontal" label="Bureau">
+                <mx:ComboBox id="bureau" dataProvider="{bureaus}"/>
+                <mx:Button icon="@Embed('icon/addlink.gif')" click="showBureauPicker(event)"></mx:Button>
+            </mx:FormItem>
+            <mx:FormItem label="Désignation du bureau d'étude:">
+                <mx:DateField id="bureauDesignationDate" selectedDate="{program.bureauDesignationDate}"/>
+            </mx:FormItem>
+            <mx:FormItem label="Conseil communal">
+                <mx:DateField id="councilDate" selectedDate="{program.councilDate}"/>
+            </mx:FormItem>
+            <mx:FormItem label="Désignation du chef de projet">
+                <mx:DateField id="managerDesignationDate" selectedDate="{program.managerDesignationDate}"/>
+            </mx:FormItem>
+            <mx:FormItem><mx:Button label="Save" click="save()"/></mx:FormItem>
         </mx:Form>
     </mx:Panel>
 
-    <mx:Button label="Save" click="save()" bottom="10" left="10" height="36" width="63"/>
+
 
 </mx:Application>

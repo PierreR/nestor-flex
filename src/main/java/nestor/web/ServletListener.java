@@ -8,6 +8,8 @@ import com.wideplay.warp.persist.PersistenceService;
 import com.wideplay.warp.persist.UnitOfWork;
 import com.wideplay.warp.persist.jpa.JpaUnit;
 import nestor.dao.Picker;
+import nestor.entity.Address;
+import nestor.entity.Bureau;
 import nestor.entity.Recipient;
 import flex.messaging.MessageBrokerServlet;
 
@@ -65,9 +67,19 @@ public class ServletListener extends GuiceServletContextListener {
 
         em.persist(recipient);
 
+        Address address = new Address();
+        address.setLine("rue des Bouleaux, 48");
+        address.setMunicipality("Bruxelles");
+        address.setPostalCode("1000");
+
+        Bureau bureau = new Bureau();
+        bureau.setName_fr("CIRB");
+        bureau.setName_nl("CIBG");
+        bureau.setAddress(address);
+
+        em.persist(bureau);
+
         em.getTransaction().commit();
-
-
 
     }
 

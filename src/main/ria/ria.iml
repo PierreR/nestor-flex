@@ -15,8 +15,8 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/../resources/ria">
+      <sourceFolder url="file://$MODULE_DIR$/../resources/ria" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../resources/ria/locale/fr_BE" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/../resources/ria/locale/fr_FR" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
