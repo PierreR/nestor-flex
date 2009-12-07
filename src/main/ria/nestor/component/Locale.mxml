@@ -3,6 +3,7 @@
 
 
     <mx:Script><![CDATA[
+        import nestor.events.ChangeLocale;
 
         private var locales:Array = [{label: "FR", value:"fr_BE"},{label:"NL", value:"nl_BE"}];
 

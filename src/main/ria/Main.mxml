@@ -3,28 +3,20 @@
                 creationComplete="initApp(event)">
 
     <mx:Metadata>
-        [ResourceBundle("resources")]
+        [ResourceBundle("nestor")]
     </mx:Metadata>
 
     <mx:Script><![CDATA[
         import mx.collections.ArrayCollection;
         import mx.core.IFlexDisplayObject;
         import mx.events.FlexEvent;
-        import mx.events.ValidationResultEvent;
+        import mx.formatters.DateFormatter;
         import mx.managers.PopUpManager;
         import mx.managers.PopUpManagerChildList;
-        import mx.resources.ResourceManager;
         import mx.rpc.events.ResultEvent;
 
         import nestor.component.*;
         import nestor.model.*;
-
-
-        [Bindable]
-        public function getString(key:String):String {
-            return resourceManager.getString("resources", key);
-        }
-
 
         [Bindable]
         public var program:Program = new Program();
@@ -75,16 +67,6 @@
         private function createResult(event:ResultEvent):void
         {
             program = event.result as Program;
-            var _creationDate:String = program.creationDate != null ? program.creationDate.toLocaleTimeString() : null;
-            var _modifiedDate:String = program.modifiedDate != null ? program.modifiedDate.toLocaleTimeString() : null;
-            if (_creationDate != null) {
-                creationDate.text = " Créé le " + _creationDate;
-            }
-            ;
-            if (_modifiedDate != null) {
-                modificationDate.text = " Sauvegarder le " + _modifiedDate;
-            }
-            ;
         }
 
         private function showBureauPicker(evt:MouseEvent):void {
@@ -108,6 +90,7 @@
 
         ]]>
     </mx:Script>
+    <mx:DateFormatter id="longDateTimeFormatter" formatString="{resourceManager.getString('SharedResources', 'longDateTimeField')}"></mx:DateFormatter>
 
     <mx:RemoteObject id="srv" destination="program">
         <mx:method name="save" result="createResult(event)"/>
@@ -125,43 +108,51 @@
 
     <mx:HBox horizontalAlign="right" width="100%">
         <mx:TextInput id="searchText" width="100"/>
-        <mx:Button label="{resourceManager.getString('resources', 'search')}" click="search()"/>
+        <mx:Button label="{resourceManager.getString('nestor', 'search')}" click="search()"/>
         <mx:Spacer width="100"/>
-        <nestor:Locale/>
+        <nestor:Locale id="localeCombo"/>
     </mx:HBox>
-    <mx:Panel title="{resourceManager.getString('resources', 'program')}" width="100%" height="100%">
+    <mx:Panel title="{resourceManager.getString('nestor', 'program')}" width="100%" height="100%">
 
-        <mx:Label id="creationDate" text="{program.creationDate}"/>
-        <mx:Label id="modificationDate" text="{program.modifiedDate}"/>
+        <mx:Box enabled="false" horizontalAlign="right" width="100%">
+            <mx:HBox>
+                <mx:Label text="{resourceManager.getString('nestor', 'creationDate')}"/>
+                <mx:Label text="{longDateTimeFormatter.format(program.creationDate)}"/>
+            </mx:HBox>
+            <mx:HBox>
+                <mx:Label text="{resourceManager.getString('nestor', 'modifiedDate')}"/>
+                <mx:Label text="{longDateTimeFormatter.format(program.modifiedDate)}"/>
+            </mx:HBox>
+        </mx:Box>
         <mx:Form id="formId">
-            <mx:FormItem label="{resourceManager.getString('resources', 'name')}" required="true">
+            <mx:FormItem label="{resourceManager.getString('nestor', 'name')}" required="true">
                 <mx:TextInput id="programName" text="{program.name}"/>
             </mx:FormItem>
-            <mx:FormItem direction="horizontal" label="{resourceManager.getString('resources', 'recipient')}"
+            <mx:FormItem direction="horizontal" label="{resourceManager.getString('nestor', 'recipient')}"
                          required="true">
                 <mx:ComboBox id="recipient" dataProvider="{recipients}"
-                             prompt="{resourceManager.getString('resources', 'prompt')}"/>
+                             prompt="{resourceManager.getString('nestor', 'prompt')}"/>
                 <mx:Button icon="@Embed('icon/addlink.gif')" click="showRecipientPicker(event)"></mx:Button>
             </mx:FormItem>
             <mx:FormItem label="Nom du chef de projet">
                 <mx:TextInput id="managerName" text="{program.managerName}"/>
             </mx:FormItem>
-            <mx:FormItem direction="horizontal" label="{getString('bureau')}">
+            <mx:FormItem direction="horizontal" label="{resourceManager.getString('nestor', 'bureau')}">
                 <mx:ComboBox id="bureau" dataProvider="{bureaus}"
-                             prompt="{resourceManager.getString('resources', 'prompt')}"/>
+                             prompt="{resourceManager.getString('nestor', 'prompt')}"/>
                 <mx:Button icon="@Embed('icon/addlink.gif')" click="showBureauPicker(event)"></mx:Button>
             </mx:FormItem>
-            <mx:FormItem label="Désignation du bureau d'étude:">
+            <mx:FormItem label="{resourceManager.getString('nestor', 'bureauDesignation')}">
                 <mx:DateField id="bureauDesignationDate" selectedDate="{program.bureauDesignationDate}"/>
             </mx:FormItem>
-            <mx:FormItem label="Conseil communal">
+            <mx:FormItem label="{resourceManager.getString('nestor', 'council')}">
                 <mx:DateField id="councilDate" selectedDate="{program.councilDate}"/>
             </mx:FormItem>
-            <mx:FormItem label="Désignation du chef de projet">
+            <mx:FormItem label="{resourceManager.getString('nestor', 'managerDesignation')}">
                 <mx:DateField id="managerDesignationDate" selectedDate="{program.managerDesignationDate}"/>
             </mx:FormItem>
             <mx:FormItem>
-                <mx:Button label="Save" click="save()"/>
+                <mx:Button label="{resourceManager.getString('nestor', 'save')}" click="save()"/>
             </mx:FormItem>
         </mx:Form>
     </mx:Panel>
