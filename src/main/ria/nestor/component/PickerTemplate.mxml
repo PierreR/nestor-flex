@@ -9,6 +9,7 @@
     <![CDATA[         
         import mx.managers.PopUpManager;
 
+        import nestor.events.ChangePicker;
         import nestor.model.Picker;
 
         [ArrayElementType("mx.core.UIComponent")]
@@ -34,6 +35,7 @@
         }
 
         private function resultHandler(event:Event):void {
+            dispatchEvent(new ChangePicker(picker));
             PopUpManager.removePopUp(this);
         }
 

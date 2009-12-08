@@ -8,14 +8,15 @@
 
     <mx:Script><![CDATA[
         import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
         import mx.core.IFlexDisplayObject;
         import mx.events.FlexEvent;
-        import mx.formatters.DateFormatter;
+        import mx.events.ValidationResultEvent;
         import mx.managers.PopUpManager;
-        import mx.managers.PopUpManagerChildList;
         import mx.rpc.events.ResultEvent;
 
         import nestor.component.*;
+        import nestor.events.ChangePicker;
         import nestor.model.*;
 
         [Bindable]
@@ -36,7 +37,6 @@
         private function initRecipients(event:ResultEvent):void
         {
             recipients = event.result as ArrayCollection;
-            //trace(recipients[0].id);
         }
 
         private function initBureaus(event:ResultEvent):void
@@ -51,7 +51,12 @@
 
         private function save():void {
             var validationResult:Array = Validator.validateAll([nameValidator, recipientValidator]);
-            if (validationResult.length > 0) return;
+            if (validationResult.length > 0) {
+                dispatchEvent(new ValidationResultEvent(ValidationResultEvent.INVALID));
+                Alert.show(resourceManager.getString('nestor', 'validationError'),
+							   resourceManager.getString('nestor', 'validationErrorTitle'));
+                return;
+            };
 
             // Hopefully this will be gone in Flex 4 ...
             program.name = programName.text;
@@ -70,13 +75,21 @@
         }
 
         private function showBureauPicker(evt:MouseEvent):void {
-            var popup = PopUpManager.createPopUp(this, BureauPicker, true);
-            calcPopUpPos(popup, evt);
+            showPicker(evt, new BureauPicker(), bureaus)
         }
 
         private function showRecipientPicker(evt:MouseEvent):void {
-            var popup = PopUpManager.createPopUp(this, RecipientPicker, true, PopUpManagerChildList.POPUP);
-            calcPopUpPos(popup, evt);
+            showPicker(evt, new RecipientPicker(), recipients);
+        }
+
+        private function showPicker(evt:MouseEvent, template:PickerTemplate, values:ArrayCollection):void {
+            PopUpManager.addPopUp(template, this, true);
+            calcPopUpPos(template, evt);
+            template.addEventListener(ChangePicker.TYPE, function(evt:ChangePicker):void {
+                values.addItem(evt.picker)
+            });
+
+
         }
 
         private function calcPopUpPos(popup:IFlexDisplayObject, evt:MouseEvent) {
@@ -90,7 +103,8 @@
 
         ]]>
     </mx:Script>
-    <mx:DateFormatter id="longDateTimeFormatter" formatString="{resourceManager.getString('SharedResources', 'longDateTimeField')}"></mx:DateFormatter>
+    <mx:DateFormatter id="longDateTimeFormatter"
+                      formatString="{resourceManager.getString('SharedResources', 'longDateTimeField')}"></mx:DateFormatter>
 
     <mx:RemoteObject id="srv" destination="program">
         <mx:method name="save" result="createResult(event)"/>
@@ -102,8 +116,8 @@
         <mx:method name="listAllBureaus" result="initBureaus(event)"/>
     </mx:RemoteObject>
 
-    <mx:Validator id="nameValidator" source="{programName}" property="text" required="true"/>
-    <mx:Validator id="recipientValidator" source="{recipient}" property="selectedItem" required="true"/>
+    <mx:Validator id="nameValidator" source="{programName}" property="text" required="true" triggerEvent="{ValidationResultEvent.INVALID}" />
+    <mx:Validator id="recipientValidator" source="{recipient}" property="selectedItem" required="true" triggerEvent="{ValidationResultEvent.INVALID}" />
 
 
     <mx:HBox horizontalAlign="right" width="100%">
@@ -134,7 +148,7 @@
                              prompt="{resourceManager.getString('nestor', 'prompt')}"/>
                 <mx:Button icon="@Embed('icon/addlink.gif')" click="showRecipientPicker(event)"></mx:Button>
             </mx:FormItem>
-            <mx:FormItem label="Nom du chef de projet">
+            <mx:FormItem label="{resourceManager.getString('nestor', 'managerName')}">
                 <mx:TextInput id="managerName" text="{program.managerName}"/>
             </mx:FormItem>
             <mx:FormItem direction="horizontal" label="{resourceManager.getString('nestor', 'bureau')}">
@@ -152,7 +166,7 @@
                 <mx:DateField id="managerDesignationDate" selectedDate="{program.managerDesignationDate}"/>
             </mx:FormItem>
             <mx:FormItem>
-                <mx:Button label="{resourceManager.getString('nestor', 'save')}" click="save()"/>
+                <mx:Button id="saveButtonId" label="{resourceManager.getString('nestor', 'save')}" click="save()" />
             </mx:FormItem>
         </mx:Form>
     </mx:Panel>
