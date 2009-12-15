@@ -27,9 +27,6 @@ public class ProgramServiceTest extends DBBootStrapper {
         EntityManager em = injector.getInstance(EntityManager.class);
         em.getTransaction().begin();
 
-        Program.Planning planning = new Program.Planning();
-        planning.setDate(EXPECTED_DAY_DATE);
-
         Recipient ixelles = new Recipient();
         ixelles.setName_fr("Ixelles");
         ixelles.setName_nl("Elsene");
@@ -47,6 +44,7 @@ public class ProgramServiceTest extends DBBootStrapper {
         Program program = new Program();
         program.setName(PROGRAM_NAME_BRUXELLES);
         program.setRecipient(bruxelles);
+
         em.persist(program);
 
         em.getTransaction().commit();
@@ -78,7 +76,6 @@ public class ProgramServiceTest extends DBBootStrapper {
 
         program = em.find(Program.class, id);
         assertEquals(EXPECTED_NAME, program.getName());
-        assertEquals(ContractType.AREA_CONTRACT, program.getContractType());
 
     }
 
@@ -88,6 +85,10 @@ public class ProgramServiceTest extends DBBootStrapper {
         Program program = dao.findByBureau("program.bureau.name");
         assertEquals("program.name", program.getName());
         assertEquals("program.bureau.address.postalCode", program.getBureau().getAddress().getPostalCode());
+        assertFalse(program.getPlannings().isEmpty());
+        Program.Planning planning = program.getPlannings().iterator().next();
+        assertEquals("program.planning.1", planning.getName());
+        assertEquals(EXPECTED_DATE, planning.getDate());
     }
 
     @Test

@@ -3,36 +3,18 @@ package nestor.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * Date: Nov 30, 2009
  */
 
 @Entity
-public class Address  {
+public class Address extends BaseEntity {
 
-    @Id @GeneratedValue
-    Integer id;
+    String postalCode,
+           municipality; // there is no link between municipality and the entity "Municipality"
 
-    String  line,
-            postalCode,
-            municipality; // there is no link between municipality and the entity "Municipality"
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getLine() {
-        return line;
-    }
-
-    public void setLine(String line) {
-        this.line = line;
-    }
 
     public String getPostalCode() {
         return postalCode;

@@ -3,6 +3,9 @@ package nestor.entity;
 import javax.persistence.MappedSuperclass;
 
 /**
+ * It is probably better to keep an abstract one:
+ *   You will have to specify security roles anyway.
+ * 
  * Date: Nov 30, 2009
  */
 @MappedSuperclass

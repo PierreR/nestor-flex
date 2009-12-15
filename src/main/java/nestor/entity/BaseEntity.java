@@ -10,6 +10,17 @@ import java.util.Date;
 
 
 /**
+ * Right now, the choice is to use this abstract base class for EVERY entities including aggregation association (such as Address).
+ *
+ * We could separate the trait into two using a simpler one for aggregation entities or even better use multiple interfaces.
+ *
+ * Java is not that flexible in term of "traits" and composition (Delegation pattern);
+ * Another option is the class is getting too big might be to use Aspects.
+ *
+ * For now, let's try to keep the trait as simple, light and flexible as it could possibly be.
+ * Any kind of validations rules should not be implemented here.
+ * The only field that cannot be null is the id.
+ * 
  * Date: Nov 29, 2009
  */
 
@@ -70,7 +81,7 @@ public abstract class BaseEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        return id == null ? super.hashCode() : id;
+        return id == null ? super.hashCode() : 17 + id;
     }
 
     @Override

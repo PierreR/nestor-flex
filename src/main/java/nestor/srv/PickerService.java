@@ -2,9 +2,7 @@ package nestor.srv;
 
 import com.google.inject.Inject;
 import nestor.dao.Picker;
-import nestor.entity.Bureau;
-import nestor.entity.PickerEntity;
-import nestor.entity.Recipient;
+import nestor.entity.*;
 import nestor.enu.Language;
 
 import java.util.Set;
@@ -20,6 +18,10 @@ public class PickerService extends Service<PickerEntity> {
 
     public Set<Recipient> listAllRecipients() {
         return dao.listAllRecipient();
+    }
+
+    public Set<ContractType> listAllContractTypes() {
+        return dao.listAllContractTypes();
     }
 
     public Set<Bureau> listAllBureaus() {

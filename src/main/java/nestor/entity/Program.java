@@ -1,7 +1,5 @@
 package nestor.entity;
 
-import nestor.enu.ContractType;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -14,10 +12,10 @@ import java.util.Set;
 public class Program extends BaseEntity {
     String managerName;                // name of the project manager
     Date grantDate,
-         notificationDate,              // notification to the commune
-         managerDesignationDate,        // designation of the project manager
-         councilDate,                   //  commune council
-         bureauDesignationDate;
+            notificationDate,              // notification to the commune
+            managerDesignationDate,        // designation of the project manager
+            councilDate,                   //  commune council
+            bureauDesignationDate;
 
     @OneToOne
     Recipient recipient;  // body that will benefit from the Program ("commune", "cpas", ...)
@@ -25,15 +23,18 @@ public class Program extends BaseEntity {
     @OneToOne
     Bureau bureau;       // bureau d'étude
 
-    @Enumerated
-    ContractType contractType = ContractType.AREA_CONTRACT;
+    @OneToOne
+    ContractType contractType; // don't try the enum
 
-    @OneToMany(mappedBy = "programId", cascade = CascadeType.ALL)
-    Set<Planning> planning = new HashSet<Planning>();
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    Set<Planning> plannings = new HashSet<Planning>();
 
+    /**
+     * TODO check the business rules about the contractType name in here !
+     */
     public String getReference() {
-        return getContractType().name() + getContractType().name() +
-               (getRecipient() != null ? getRecipient().getPostalCode() : "") ;
+        return (getContractType() != null ? getContractType().getName_fr() : "") +
+                (getRecipient() != null ? getRecipient().getPostalCode() : "");
     }
 
 
@@ -102,12 +103,12 @@ public class Program extends BaseEntity {
         this.contractType = contractType;
     }
 
-    public Set<Planning> getPlanning() {
-        return planning;
+    public Set<Planning> getPlannings() {
+        return plannings;
     }
 
-    public void setPlanning(Set<Planning> planning) {
-        this.planning = planning;
+    public void setPlannings(Set<Planning> planning) {
+        this.plannings = planning;
     }
 
     public Bureau getBureau() {
@@ -118,31 +119,17 @@ public class Program extends BaseEntity {
         this.bureau = bureau;
     }
 
+    public void addPlanning(Planning planning) {
+        this.getPlannings().add(planning);
+        planning.setProgram(this);
+    }
+
     @Entity()
-    public static class Planning {
-        @Id @GeneratedValue
-        int id;
-        String description;
+    public static class Planning extends BaseEntity {
         Date date;
 
         @ManyToOne
-        Program programId;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
+        Program program;
 
         public Date getDate() {
             return date;
@@ -152,12 +139,13 @@ public class Program extends BaseEntity {
             this.date = date;
         }
 
-        public Program getProgramId() {
-            return programId;
+        public Program getProgram() {
+            return program;
         }
 
-        public void setProgramId(Program programId) {
-            this.programId = programId;
+
+        public void setProgram(Program program) {
+            this.program = program;
         }
     }
 }

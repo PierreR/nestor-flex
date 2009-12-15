@@ -15,7 +15,7 @@
         protected override function save():void {
             picker = new Bureau();
             var address:Address = new Address();
-            address.line = line.text;
+            address.name = line.text;
             address.postalCode = postalCode.text;
             address.municipality = municipality.text;
             Bureau(picker).address = address;
