@@ -19,18 +19,13 @@ public abstract class Service<E extends BaseEntity> {
     Provider<EntityManager> emp;
 
     @Transactional
-    public E save(E program) {
-        EntityManager em = emp.get();
-
+    final public E save(E entity) {
 
         try {
-            if (program.getId() != null && program.getId() > 0) {
-                program.setModifiedDate(new Date());
-                program = em.merge(program);
+            if (entity.getId() != null && entity.getId() > 0) {
+                entity = update(entity);
             } else {
-                program.setId(null);
-                program.setCreationDate(new Date());
-                em.persist(program);
+                create(entity);
             }
         } catch (PersistenceException pe) {
             //todo log into tomcat
@@ -38,8 +33,25 @@ public abstract class Service<E extends BaseEntity> {
 
         }
 
-        return program;
+        return entity;
 
+
+    }
+
+
+    E update(final E entity) {
+        EntityManager em = emp.get();
+        entity.setModifiedDate(new Date());
+        return em.merge(entity);
+    }
+
+    void create(final E entity) {
+        EntityManager em = emp.get();
+        entity.setId(null);
+        entity.setCreationDate(new Date());
+        entity.setModifiedDate(new Date());
+
+        em.persist(entity);
 
     }
 

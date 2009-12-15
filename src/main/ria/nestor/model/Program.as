@@ -1,4 +1,8 @@
 package nestor.model{
+import flash.utils.IDataInput;
+import flash.utils.IDataOutput;
+import flash.utils.IExternalizable;
+
 import mx.collections.ArrayCollection;
 
 /**
@@ -32,6 +36,5 @@ public class Program extends BaseEntity {
         return null;
 
     }
-
 }
 }

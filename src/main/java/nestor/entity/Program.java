@@ -1,6 +1,7 @@
 package nestor.entity;
 
 import javax.persistence.*;
+import java.io.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -123,6 +124,12 @@ public class Program extends BaseEntity {
         this.getPlannings().add(planning);
         planning.setProgram(this);
     }
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+
+    }
+
+
 
     @Entity()
     public static class Planning extends BaseEntity {

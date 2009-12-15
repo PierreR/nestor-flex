@@ -97,6 +97,23 @@
         </redeploy>
     </system>
 
+    <logging>
+    <target class="flex.messaging.log.ConsoleTarget" level="Warn">
+        <properties>
+            <prefix>[BlazeDS]</prefix>
+            <includeDate>false</includeDate>
+            <includeTime>false</includeTime>
+            <includeLevel>yes</includeLevel>
+            <includeCategory>yes</includeCategory>
+        </properties>
+        <filters>
+            <pattern>Endpoint.*</pattern>
+            <pattern>Service.*</pattern>
+            <pattern>Configuration</pattern>
+        </filters>
+    </target>
+</logging>
+
     
 
 </services-config>

@@ -22,6 +22,7 @@
         import mx.events.FlexEvent;
         import mx.events.ValidationResultEvent;
         import mx.managers.PopUpManager;
+        import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         import nestor.component.*;
@@ -95,6 +96,11 @@
             program = event.result as Program;
         }
 
+         private function handleSearchFault(event:FaultEvent):void {
+             Alert.show(event.fault.rootCause.message, "Information");
+             trace(event);
+             
+         }
         private function handleSearch(event:ResultEvent):void
         {
             program = event.result as Program;
@@ -131,7 +137,8 @@
         }
 
 
-        private function createPlanning():void {
+        private function createPlanning(evt:MouseEvent):void {
+        //    showPicker(evt, new PlanningPicker(), plannings)
         }
 
 
@@ -145,7 +152,7 @@
 
     <mx:RemoteObject id="srv" destination="program">
         <mx:method name="save" result="handleSave(event)"/>
-        <mx:method name="findByName" result="handleSearch(event)"/>
+        <mx:method name="findByName" result="handleSearch(event)" fault="handleSearchFault(event)"/>
     </mx:RemoteObject>
 
     <mx:RemoteObject id="pickerService" destination="picker">
@@ -211,16 +218,16 @@
             <mx:FormItem label="{resourceManager.getString('nestor', 'planning')}">
                 <mx:HBox width="100%" height="100%">
                     <mx:DataGrid width="100%" height="100%" id="planningGridId" dataProvider="{program.plannings}"
-                                 doubleClickEnabled="true" doubleClick="">
+                                 doubleClickEnabled="true" doubleClick="" editable="true">
                         <mx:columns>
                             <mx:DataGridColumn headerText="{resourceManager.getString('nestor', 'description')}"
-                                               dataField="name"/>
+                                               dataField="name" editable="true"/>
                             <mx:DataGridColumn headerText="{resourceManager.getString('nestor', 'date')}"
                                                dataField="date"/>
                         </mx:columns>
                     </mx:DataGrid>
                     <mx:VBox height="100%">
-                        <mx:Button icon="@Embed('/icon/addlink.gif')" click="createPlanning()"/>
+                        <mx:Button icon="@Embed('/icon/addlink.gif')" click="createPlanning(event)"/>
                         <mx:Button icon="@Embed('/icon/deletelink.gif')" click="deletePlanning()"
                                    enabled="{planningGridId.selectedIndices.length > 0}"/>
                     </mx:VBox>
