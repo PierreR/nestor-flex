@@ -1,13 +1,13 @@
 <?xml version="1.0" ?>
-        <!--
+<!--
 
-        NAMING CONVENTION:
-          - Every callback function starts with handle; if successfull no postfix, if failure "failure" postfix.
-          - The main service is named "srv"
-          - To avoid naming collision, all component ids (which are available variables) are postfix with "id";
-              on the other hands component ids should not be named after the component class (don't use "saveButtonId" but "saveId")
-              except for Validator and Formatter; components that bring somes business rules ("nameValidator" or "longDateTimeFormatter").
-        -->
+NAMING CONVENTION:
+  - Every callback function starts with handle; if successfull no postfix, if failure "failure" postfix.
+  - The main service is named "srv"
+  - To avoid naming collision, all component ids (which are available variables) are postfix with "id";
+      on the other hands component ids should not be named after the component class (don't use "saveButtonId" but "saveId")
+      except for Validator and Formatter; components that bring somes business rules ("nameValidator" or "longDateTimeFormatter").
+-->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:nestor="nestor.component.*"
                 creationComplete="initApp(event)">
 
@@ -28,7 +28,7 @@
         import nestor.component.*;
         import nestor.events.ChangePicker;
         import nestor.model.*;
-        
+
         [Bindable]
         public var program:Program = new Program();
 
@@ -96,15 +96,16 @@
             program = event.result as Program;
         }
 
-         private function handleSearchFault(event:FaultEvent):void {
-             Alert.show(event.fault.rootCause.message, "Information");
-             trace(event);
-             
-         }
+        private function handleSearchFault(event:FaultEvent):void {
+            Alert.show(event.fault.rootCause.message, "Information");
+            trace(event);
+
+        }
+
         private function handleSearch(event:ResultEvent):void
         {
             program = event.result as Program;
-           
+
             contractTypeId.selectedItem = program.getSelected(contractTypeId.dataProvider, program.contractType.id);
             recipientId.selectedItem = program.getSelected(recipientId.dataProvider, program.recipient.id);
             bureauId.selectedItem = program.getSelected(bureauId.dataProvider, program.bureau.id);
@@ -118,11 +119,12 @@
             showPicker(evt, new RecipientPicker(), recipients);
         }
 
-        private function showPicker(evt:MouseEvent, template:PickerTemplate, values:ArrayCollection):void {
+
+        private function showPicker(evt:MouseEvent, template:IFlexDisplayObject, values:ArrayCollection):void {
             PopUpManager.addPopUp(template, this, true);
             calcPopUpPos(template, evt);
             template.addEventListener(ChangePicker.TYPE, function(evt:ChangePicker):void {
-                values.addItem(evt.picker)
+                values.addItem(evt.entity)
             });
 
 
@@ -139,7 +141,7 @@
 
 
         private function createPlanning(evt:MouseEvent):void {
-        //    showPicker(evt, new PlanningPicker(), plannings)
+            showPicker(evt, new PlanningPicker(), program.plannings);
         }
 
 

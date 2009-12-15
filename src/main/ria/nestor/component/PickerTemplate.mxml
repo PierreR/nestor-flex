@@ -34,7 +34,7 @@
             PopUpManager.removePopUp(this);
         }
 
-        private function resultHandler(event:Event):void {
+        private function handleSave(event:Event):void {
             dispatchEvent(new ChangePicker(picker));
             PopUpManager.removePopUp(this);
         }
@@ -44,7 +44,7 @@
     </mx:Script>
 
     <mx:RemoteObject id="srv" destination="picker">
-        <mx:method name="save" result="resultHandler(event)"/>
+        <mx:method name="save" result="handleSave(event)"/>
     </mx:RemoteObject>
 
     <mx:Form id="form">

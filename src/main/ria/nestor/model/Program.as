@@ -26,7 +26,7 @@ public class Program extends BaseEntity {
     public var councilDate:Date;
     public var bureauDesignationDate:Date;
     public var municipality:Bureau;
-    public var plannings:ArrayCollection;
+    public var plannings:ArrayCollection = new ArrayCollection();
 
     public function getSelected(dataProvider:Object, pickerId:int):Picker {
         for each(var picker:Picker in dataProvider) {

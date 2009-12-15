@@ -1,4 +1,42 @@
 <?xml version="1.0"?>
-<nestor.component:PickerTemplate xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:nestor.component="nestor.component.*">
-    
-</nestor.component:PickerTemplate>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml">
+
+
+    <mx:Script>
+            <![CDATA[
+        import mx.managers.PopUpManager;
+        import nestor.model.Planning;
+        import nestor.events.ChangePicker;
+
+        protected var planning:Planning = new Planning();
+
+
+        protected function save():void {
+            planning.name = nameId.text;
+            planning.date = dateId.selectedDate;
+            dispatchEvent(new ChangePicker(planning));
+            PopUpManager.removePopUp(this);
+
+        }
+
+        private function cancel():void {
+            PopUpManager.removePopUp(this);
+        }
+
+
+         ]]>
+    </mx:Script>
+
+    <mx:Form id="form">
+        <mx:FormItem label="Nom">
+            <mx:TextInput id="nameId"/>
+        </mx:FormItem>
+        <mx:FormItem label="Nom">
+            <mx:DateField id="dateId"/>
+        </mx:FormItem>
+        <mx:FormItem direction="horizontal">
+            <mx:Button id="cancelButtonId" click="cancel()" label="Cancel"/>
+            <mx:Button id="saveButtonId" click="save()" label="Save"/>
+        </mx:FormItem>
+    </mx:Form>
+</mx:TitleWindow>
