@@ -11,6 +11,7 @@ public class Program extends BaseEntity {
     public function Program() {
         super();
     }
+
     public var contractType:ContractType;
     public var managerName:String;
     public var bureau:Bureau;
@@ -22,6 +23,15 @@ public class Program extends BaseEntity {
     public var bureauDesignationDate:Date;
     public var municipality:Bureau;
     public var plannings:ArrayCollection;
+
+    public function getSelected(dataProvider:Object, pickerId:int):Picker {
+        for each(var picker:Picker in dataProvider) {
+            if (picker.id == pickerId) return picker;
+        }
+
+        return null;
+
+    }
 
 }
 }

@@ -1,4 +1,13 @@
 <?xml version="1.0" ?>
+        <!--
+
+        NAMING CONVENTION:
+          - Every callback function starts with handle; if successfull no postfix, if failure "failure" postfix.
+          - The main service is named "srv"
+          - To avoid naming collision, all component ids (which are available variables) are postfix with "id";
+              on the other hands component ids should not be named after the component class (don't use "saveButtonId" but "saveId")
+              except for Validator and Formatter; components that bring somes business rules ("nameValidator" or "longDateTimeFormatter").
+        -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:nestor="nestor.component.*"
                 creationComplete="initApp(event)">
 
@@ -18,7 +27,6 @@
         import nestor.component.*;
         import nestor.events.ChangePicker;
         import nestor.model.*;
-
 
         [Bindable]
         public var program:Program = new Program();
@@ -41,51 +49,58 @@
             pickerService.listAllContractTypes();
         }
 
-        private function initRecipients(event:ResultEvent):void
+        private function handleRecipients(event:ResultEvent):void
         {
             recipients = event.result as ArrayCollection;
         }
 
-        private function initBureaus(event:ResultEvent):void
+        private function handleBureaus(event:ResultEvent):void
         {
             bureaus = event.result as ArrayCollection;
         }
 
-        private function initContractTypes(event:ResultEvent):void
+        private function handleContractTypes(event:ResultEvent):void
         {
             contractTypes = event.result as ArrayCollection;
         }
 
 
         private function search():void {
-            srv.findByName(searchText.text);
+            srv.findByName(searchId.text);
         }
 
         private function save():void {
-            var validationResult:Array = Validator.validateAll([nameValidator, recipientValidator]);
+            var validationResult:Array = Validator.validateAll([nameValidator, recipientValidatorId]);
             if (validationResult.length > 0) {
                 dispatchEvent(new ValidationResultEvent(ValidationResultEvent.INVALID));
                 Alert.show(resourceManager.getString('nestor', 'validationError'),
                         resourceManager.getString('nestor', 'validationErrorTitle'));
                 return;
             }
-            ;
+
 
             // Hopefully this will be gone in Flex 4 ...
-            program.name = programName.text;
-            program.managerName = managerName.text;
-            program.recipient = Recipient(recipient.selectedItem)
-            program.bureau = Bureau(bureau.selectedItem)
-            program.bureauDesignationDate = bureauDesignationDate.selectedDate;
-            program.councilDate = councilDate.selectedDate;
-            program.managerDesignationDate = managerDesignationDate.selectedDate;
+            program.name = nameId.text;
+            program.managerName = managerNameId.text;
+            program.recipient = Recipient(recipientId.selectedItem)
+            program.bureau = Bureau(bureauId.selectedItem)
+            program.bureauDesignationDate = bureauDesignationDateId.selectedDate;
+            program.councilDate = councilDateId.selectedDate;
+            program.managerDesignationDate = managerDesignationDateId.selectedDate;
             srv.save(program);
         }
 
-        private function createResult(event:ResultEvent):void
+        private function handleSave(event:ResultEvent):void
         {
             program = event.result as Program;
-            trace(program);
+        }
+
+        private function handleSearch(event:ResultEvent):void
+        {
+            program = event.result as Program;
+            contractTypeId.selectedItem = program.getSelected(contractTypeId.dataProvider, program.contractType.id);
+            recipientId.selectedItem = program.getSelected(recipientId.dataProvider, program.recipient.id);
+            bureauId.selectedItem = program.getSelected(bureauId.dataProvider, program.bureau.id);
         }
 
         private function showBureauPicker(evt:MouseEvent):void {
@@ -129,24 +144,24 @@
                       formatString="{resourceManager.getString('SharedResources', 'longDateTimeField')}"></mx:DateFormatter>
 
     <mx:RemoteObject id="srv" destination="program">
-        <mx:method name="save" result="createResult(event)"/>
-        <mx:method name="findByName" result="createResult(event)"/>
+        <mx:method name="save" result="handleSave(event)"/>
+        <mx:method name="findByName" result="handleSearch(event)"/>
     </mx:RemoteObject>
 
     <mx:RemoteObject id="pickerService" destination="picker">
-        <mx:method name="listAllRecipients" result="initRecipients(event)"/>
-        <mx:method name="listAllBureaus" result="initBureaus(event)"/>
-        <mx:method name="listAllContractTypes" result="initContractTypes(event)"/>
+        <mx:method name="listAllRecipients" result="handleRecipients(event)"/>
+        <mx:method name="listAllBureaus" result="handleBureaus(event)"/>
+        <mx:method name="listAllContractTypes" result="handleContractTypes(event)"/>
     </mx:RemoteObject>
 
-    <mx:Validator id="nameValidator" source="{programName}" property="text" required="true"
+    <mx:Validator id="nameValidator" source="{nameId}" property="text" required="true"
                   triggerEvent="{ValidationResultEvent.INVALID}"/>
-    <mx:Validator id="recipientValidator" source="{recipient}" property="selectedItem" required="true"
+    <mx:Validator id="recipientValidatorId" source="{recipientId}" property="selectedItem" required="true"
                   triggerEvent="{ValidationResultEvent.INVALID}"/>
 
 
     <mx:HBox horizontalAlign="right" width="100%">
-        <mx:TextInput id="searchText" width="100"/>
+        <mx:TextInput id="searchId" width="100"/>
         <mx:Button label="{resourceManager.getString('nestor', 'search')}" click="search()"/>
         <mx:Spacer width="100"/>
         <nestor:Locale id="localeCombo"/>
@@ -165,37 +180,37 @@
         </mx:Box>
         <mx:Form id="formId">
             <mx:FormItem label="{resourceManager.getString('nestor', 'name')}" required="true">
-                <mx:TextInput id="programName" text="{program.name}"/>
+                <mx:TextInput id="nameId" text="{program.name}"/>
             </mx:FormItem>
             <mx:FormItem label="{resourceManager.getString('nestor', 'contractType')}" required="true">
-                <mx:ComboBox id="contractType" dataProvider="{contractTypes}"/>
+                <mx:ComboBox id="contractTypeId" dataProvider="{contractTypes}"/>
             </mx:FormItem>
             <mx:FormItem direction="horizontal" label="{resourceManager.getString('nestor', 'recipient')}"
                          required="true">
-                <mx:ComboBox id="recipient" dataProvider="{recipients}" selectedItem="{program.recipient}"
+                <mx:ComboBox id="recipientId" dataProvider="{recipients}"
                              prompt="{resourceManager.getString('nestor', 'prompt')}"/>
                 <mx:Button icon="@Embed('icon/addlink.gif')" click="showRecipientPicker(event)"></mx:Button>
             </mx:FormItem>
             <mx:FormItem label="{resourceManager.getString('nestor', 'managerName')}">
-                <mx:TextInput id="managerName" text="{program.managerName}"/>
+                <mx:TextInput id="managerNameId" text="{program.managerName}"/>
             </mx:FormItem>
             <mx:FormItem direction="horizontal" label="{resourceManager.getString('nestor', 'bureau')}">
-                <mx:ComboBox id="bureau" dataProvider="{bureaus}"
+                <mx:ComboBox id="bureauId" dataProvider="{bureaus}"
                              prompt="{resourceManager.getString('nestor', 'prompt')}"/>
                 <mx:Button icon="@Embed('icon/addlink.gif')" click="showBureauPicker(event)"></mx:Button>
             </mx:FormItem>
             <mx:FormItem label="{resourceManager.getString('nestor', 'bureauDesignation')}">
-                <mx:DateField id="bureauDesignationDate" selectedDate="{program.bureauDesignationDate}"/>
+                <mx:DateField id="bureauDesignationDateId" selectedDate="{program.bureauDesignationDate}"/>
             </mx:FormItem>
             <mx:FormItem label="{resourceManager.getString('nestor', 'council')}">
-                <mx:DateField id="councilDate" selectedDate="{program.councilDate}"/>
+                <mx:DateField id="councilDateId" selectedDate="{program.councilDate}"/>
             </mx:FormItem>
             <mx:FormItem label="{resourceManager.getString('nestor', 'managerDesignation')}">
-                <mx:DateField id="managerDesignationDate" selectedDate="{program.managerDesignationDate}"/>
+                <mx:DateField id="managerDesignationDateId" selectedDate="{program.managerDesignationDate}"/>
             </mx:FormItem>
             <mx:FormItem label="{resourceManager.getString('nestor', 'planning')}">
                 <mx:HBox width="100%" height="100%">
-                    <mx:DataGrid width="100%" height="100%" id="planningGrid" dataProvider="{program.plannings}"
+                    <mx:DataGrid width="100%" height="100%" id="planningGridId" dataProvider="{program.plannings}"
                                  doubleClickEnabled="true" doubleClick="">
                         <mx:columns>
                             <mx:DataGridColumn headerText="{resourceManager.getString('nestor', 'description')}"
@@ -207,12 +222,12 @@
                     <mx:VBox height="100%">
                         <mx:Button icon="@Embed('/icon/addlink.gif')" click="createPlanning()"/>
                         <mx:Button icon="@Embed('/icon/deletelink.gif')" click="deletePlanning()"
-                                   enabled="{planningGrid.selectedIndices.length > 0}"/>
+                                   enabled="{planningGridId.selectedIndices.length > 0}"/>
                     </mx:VBox>
                 </mx:HBox>
             </mx:FormItem>
             <mx:FormItem>
-                <mx:Button id="saveButtonId" label="{resourceManager.getString('nestor', 'save')}" click="save()"/>
+                <mx:Button id="saveId" label="{resourceManager.getString('nestor', 'save')}" click="save()"/>
             </mx:FormItem>
         </mx:Form>
     </mx:Panel>
