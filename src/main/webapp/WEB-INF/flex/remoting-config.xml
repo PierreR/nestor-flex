@@ -11,7 +11,7 @@
         <channel ref="my-amf">
             <serialization>
                 <properties>
-                    <log-property-errors>false</log-property-errors>
+                    <log-property-errors>true</log-property-errors>
                 </properties>
             </serialization>
         </channel>

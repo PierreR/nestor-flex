@@ -28,8 +28,6 @@
         import nestor.component.*;
         import nestor.events.ChangePicker;
         import nestor.model.*;
-
-        public var __planning = new Planning();
         
         [Bindable]
         public var program:Program = new Program();

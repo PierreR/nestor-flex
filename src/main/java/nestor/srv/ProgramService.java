@@ -35,23 +35,6 @@ public class ProgramService extends Service<Program> {
         }
     }
 
-    @Override
-    /**
-     * Here comes a huge flex dependency ! We have to manually deserialize avoiding the pain ...
-     */
-    public Program update(Program program) {
-/*        Set plannings = new HashSet(program.getPlannings());
-        program.setPlannings(new HashSet<Program.Planning>());
-        for (Object p : plannings) {
-            HashMap _planning = (HashMap) p;
-            Program.Planning planning = new Program.Planning();
-            planning.setId((Integer) _planning.get("id"));
-            planning.setDate((Date) _planning.get("date"));
-            planning.setName((String) _planning.get("name"));
-            program.addPlanning(planning);
-        }*/
-        return super.update(program);
-    }
 
     public nestor.entity.Program findByRecipient(String recipientName, String languageToken) {
         switch(Language.valueOf(languageToken.toUpperCase())) {

@@ -32,11 +32,15 @@ public class Program extends BaseEntity {
         for each(var picker:Picker in dataProvider) {
             if (picker.id == pickerId) return picker;
         }
-
         return null;
-
     }
 
+    /**
+     *  This forces a link with Planning.as in order to manage Collection serialization on the java side
+    */
+    public function addPlanning(planning:Planning):void {
+        plannings.addItem(planning);
+    }
 }
 
 }
