@@ -29,6 +29,8 @@
         import nestor.events.ChangePicker;
         import nestor.model.*;
 
+        public var __planning = new Planning();
+        
         [Bindable]
         public var program:Program = new Program();
 
@@ -104,6 +106,7 @@
         private function handleSearch(event:ResultEvent):void
         {
             program = event.result as Program;
+           
             contractTypeId.selectedItem = program.getSelected(contractTypeId.dataProvider, program.contractType.id);
             recipientId.selectedItem = program.getSelected(recipientId.dataProvider, program.recipient.id);
             bureauId.selectedItem = program.getSelected(bureauId.dataProvider, program.bureau.id);

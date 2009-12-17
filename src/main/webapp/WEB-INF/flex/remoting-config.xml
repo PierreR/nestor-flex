@@ -8,7 +8,13 @@
     </adapters>
 
     <default-channels>
-        <channel ref="my-amf"/>
+        <channel ref="my-amf">
+            <serialization>
+                <properties>
+                    <log-property-errors>false</log-property-errors>
+                </properties>
+            </serialization>
+        </channel>
     </default-channels>
 
 
@@ -25,5 +31,6 @@
             <source>nestor.srv.PickerService</source>
         </properties>
     </destination>
+
 
 </service>

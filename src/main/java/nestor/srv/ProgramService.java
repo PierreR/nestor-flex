@@ -40,7 +40,7 @@ public class ProgramService extends Service<Program> {
      * Here comes a huge flex dependency ! We have to manually deserialize avoiding the pain ...
      */
     public Program update(Program program) {
-        Set plannings = new HashSet(program.getPlannings());
+/*        Set plannings = new HashSet(program.getPlannings());
         program.setPlannings(new HashSet<Program.Planning>());
         for (Object p : plannings) {
             HashMap _planning = (HashMap) p;
@@ -49,7 +49,7 @@ public class ProgramService extends Service<Program> {
             planning.setDate((Date) _planning.get("date"));
             planning.setName((String) _planning.get("name"));
             program.addPlanning(planning);
-        }
+        }*/
         return super.update(program);
     }
 
